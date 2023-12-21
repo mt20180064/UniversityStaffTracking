@@ -72,7 +72,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
+            
             return departmentConverter.toDto(department);
+            
         } else {
             throw new Exception("Department does not exist!");
         }

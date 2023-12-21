@@ -1,5 +1,9 @@
-create table tbl_department(
-	id bigint unsigned not null AUTO_INCREMENT,
-	name varchar(100) not null,
-	primary key (id)
-) 
+CREATE TABLE tbl_department (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    manager_id BIGINT UNSIGNED,
+    secretary_id BIGINT UNSIGNED,
+    PRIMARY KEY (id)
+    
+);
+

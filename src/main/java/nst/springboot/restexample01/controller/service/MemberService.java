@@ -5,7 +5,10 @@
 package nst.springboot.restexample01.controller.service;
 
 import java.util.List;
+import java.util.Optional;
 import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
+import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
 import nst.springboot.restexample01.dto.MemberDto;
 
 /**
@@ -18,5 +21,5 @@ public interface MemberService {
     void delete(Long id) throws Exception;
     void update(MemberDto memberDto)throws Exception;
     MemberDto findById(Long id)throws Exception;
-     void addAcademicTitleHistory(Long memberId, AcademicTitleHistory academicTitleHistory)throws Exception;
+    public void updateAcademicTitleHistory(Member member, AcademicTitleHistoryDto academicTitleHistoryDto);
 }

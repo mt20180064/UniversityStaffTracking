@@ -13,7 +13,9 @@ import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.AcademicTitleHistoryRepository;
 import nst.springboot.restexample01.controller.repository.MemberRepository;
 import nst.springboot.restexample01.controller.service.MemberService;
+import nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
+import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
 import nst.springboot.restexample01.dto.MemberDto;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +28,13 @@ public class MemberServiceImpl implements MemberService {
     private final MemberConverter memberConverter;
     private final MemberRepository memberRepository;
     private final AcademicTitleHistoryRepository academicTitleHistoryRepository;
+    private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
 
-    public MemberServiceImpl(nst.springboot.restexample01.converter.impl.MemberConverter memberConverter, nst.springboot.restexample01.controller.repository.MemberRepository memberRepository,nst.springboot.restexample01.controller.repository.AcademicTitleHistoryRepository academicTitleHistoryRepository ) {
+    public MemberServiceImpl(nst.springboot.restexample01.converter.impl.MemberConverter memberConverter, nst.springboot.restexample01.controller.repository.MemberRepository memberRepository, nst.springboot.restexample01.controller.repository.AcademicTitleHistoryRepository academicTitleHistoryRepository, nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter academicTitleHistoryConverter) {
         this.memberConverter = memberConverter;
         this.memberRepository = memberRepository;
         this.academicTitleHistoryRepository= academicTitleHistoryRepository;
+        this.academicTitleHistoryConverter = academicTitleHistoryConverter;
     }
     @Override
     public MemberDto save(MemberDto memberDto) throws Exception {
@@ -73,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
         if (m.isPresent()) {
             //postoji
             Member member = m.get();
+            System.out.println("u serviceimpl" +member);
             return memberConverter.toDto(member);
         } else {
             throw new Exception("Member does not exist!");
@@ -80,17 +85,15 @@ public class MemberServiceImpl implements MemberService {
     }
     
     
+   
+
     @Override
-     public void addAcademicTitleHistory(Long memberId, AcademicTitleHistory academicTitleHistory) throws Exception{
-        Optional<Member> member = memberRepository.findById(memberId);
-        if (member.isPresent()){
-            Member m = member.get();
-            academicTitleHistory.setMember(m);
-        
-        m.getAcademicTitleHistories().add(academicTitleHistory);
-        memberRepository.save(m);
-    } else throw new Exception ("that member does not exist");
-}
+    public void updateAcademicTitleHistory(Member member, AcademicTitleHistoryDto academicTitleHistoryDto) {
+        AcademicTitleHistory academicTitleHistory = academicTitleHistoryConverter.toEntity(academicTitleHistoryDto);
+        member.getAcademicTitleHistories().add(academicTitleHistory);
+        memberRepository.save(member);
+    }
+    
     
     
 }

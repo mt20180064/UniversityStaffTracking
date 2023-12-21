@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.controller.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -25,44 +27,38 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id")
-    private Long member_id;
+    private Long id;
     @Column (name = "firstname")
     private String firstname;
     @Column (name = "lastname")
     private String lastname;
-    @Column (name = "academic_title")
-    private String academic_title;
-    @Column (name = "education_title")
-    private String education_title;
-    @Column (name = "scientific_field")
-    private String scientific_field;
+     @ManyToOne
+    @JoinColumn(name = "academic_title_id")
+     @JsonIgnore
+    private AcademicTitle academic_title;
+     @ManyToOne
+    @JoinColumn(name = "education_title_id")
+     @JsonIgnore
+    private EducationTitle education_title;
+     @ManyToOne
+    @JoinColumn(name = "scientific_field_id")
+     @JsonIgnore
+    private ScientificField scientific_field;
     
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department;
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<AcademicTitleHistory> academicTitleHistories;
     public Member() {
     }
 
-    public Member(Long member_id, String firstname, String lastname, String academic_title, String education_title, String scientific_field, Department department) {
-        this.member_id = member_id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.academic_title = academic_title;
-        this.education_title = education_title;
-        this.scientific_field = scientific_field;
-        this.department = department;
-    }
+   
 
-    public Long getMember_id() {
-        return member_id;
-    }
-
-    public void setMember_id(Long member_id) {
-        this.member_id = member_id;
-    }
+  
 
     public String getFirstname() {
         return firstname;
@@ -80,29 +76,41 @@ public class Member {
         this.lastname = lastname;
     }
 
-    public String getAcademic_title() {
-        return academic_title;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
     }
 
-    public void setAcademic_title(String academic_title) {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Member other = (Member) obj;
+        return Objects.equals(this.id, other.id);
+    }
+
+   
+
+    public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.academic_title = academic_title;
-    }
-
-    public String getEducation_title() {
-        return education_title;
-    }
-
-    public void setEducation_title(String education_title) {
         this.education_title = education_title;
-    }
-
-    public String getScientific_field() {
-        return scientific_field;
-    }
-
-    public void setScientific_field(String scientific_field) {
         this.scientific_field = scientific_field;
+        this.department = department;
+        this.academicTitleHistories = academicTitleHistories;
     }
+
+   
 
     public Department getDepartment() {
         return department;
@@ -118,6 +126,38 @@ public class Member {
 
     public void setAcademicTitleHistories(List<AcademicTitleHistory> academicTitleHistories) {
         this.academicTitleHistories = academicTitleHistories;
+    }
+
+    public AcademicTitle getAcademic_title() {
+        return academic_title;
+    }
+
+    public void setAcademic_title(AcademicTitle academic_title) {
+        this.academic_title = academic_title;
+    }
+
+    public EducationTitle getEducation_title() {
+        return education_title;
+    }
+
+    public void setEducation_title(EducationTitle education_title) {
+        this.education_title = education_title;
+    }
+
+    public ScientificField getScientific_field() {
+        return scientific_field;
+    }
+
+    public void setScientific_field(ScientificField scientific_field) {
+        this.scientific_field = scientific_field;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
     
