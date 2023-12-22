@@ -30,7 +30,7 @@ public class AcademicTitleHistoryConverter implements DtoEntityConverter< Academ
             
     @Override
     public AcademicTitleHistory toEntity(AcademicTitleHistoryDto t) {
-        return new AcademicTitleHistory(t.getId(), new Member(), t.getStartDate(), t.getEndDate(), t.getAcademicTitle(), t.getScientificField());
+        return new AcademicTitleHistory(t.getId(), t.getMember(), t.getStartDate(), t.getEndDate(), t.getAcademicTitle(), t.getScientificField());
     }
     
 }

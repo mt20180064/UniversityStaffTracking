@@ -15,6 +15,7 @@ import nst.springboot.restexample01.controller.service.AcademicTitleHistoryServi
 import nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter;
 import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -49,9 +50,16 @@ private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
     @Override
     public AcademicTitleHistoryDto save(AcademicTitleHistoryDto academicTitleHistoryDto) throws Exception {
           AcademicTitleHistory a = academicTitleHistoryConverter.toEntity(academicTitleHistoryDto);
-        
-        academicTitleHistoryRepository.save(a);
-        return academicTitleHistoryDto;
+        System.out.println(a);
+        AcademicTitleHistory ath =academicTitleHistoryRepository.save(a);
+        System.out.println(ath);
+        return academicTitleHistoryConverter.toDto(ath);
+    }
+
+    @Override
+    public List<AcademicTitleHistory> getAll() {
+    List<AcademicTitleHistory> ath = academicTitleHistoryRepository.findAll();
+    return ath;
     }
 
     

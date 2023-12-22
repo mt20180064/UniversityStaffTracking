@@ -6,6 +6,7 @@ package nst.springboot.restexample01.controller.service;
 
 import java.util.List;
 import java.util.Optional;
+import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,5 @@ public interface AcademicTitleHistoryService {
     List<AcademicTitleHistoryDto> findByMember (Long memberId);
      Optional <AcademicTitleHistoryDto> findById (Long id);
     AcademicTitleHistoryDto save(AcademicTitleHistoryDto academicTitleHistoryDto) throws Exception;
+    List<AcademicTitleHistory> getAll();
 }

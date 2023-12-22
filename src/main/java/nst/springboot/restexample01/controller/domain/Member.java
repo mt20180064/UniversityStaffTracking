@@ -5,6 +5,7 @@
 package nst.springboot.restexample01.controller.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,12 +51,13 @@ public class Member {
     @JsonIgnore
     private Department department;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AcademicTitleHistory> academicTitleHistories;
     public Member() {
     }
 
+  
    
 
   

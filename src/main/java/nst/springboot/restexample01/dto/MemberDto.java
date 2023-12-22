@@ -29,6 +29,8 @@ public class MemberDto implements Serializable{
     public MemberDto() {
     }
 
+   
+
     public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, DepartmentDto departmentDto, List<AcademicTitleHistory> academicTitleHistories) {
         this.id = id;
         this.firstname = firstname;

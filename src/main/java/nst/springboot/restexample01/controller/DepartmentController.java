@@ -7,7 +7,10 @@ package nst.springboot.restexample01.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.service.DepartmentService;
+import nst.springboot.restexample01.controller.service.SubjectService;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
@@ -34,10 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/department")
 public class DepartmentController {
 
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
+    
 
     public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
+
         System.out.println("nst.springboot.restexample01.controller.DepartmentController.<init>()");
         System.out.println("kreiran je konroller!");
     }
@@ -100,7 +105,11 @@ public class DepartmentController {
         } catch (Exception e) {
             return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
         }*/
-
+       
+        
+        
+        
+        
         departmentService.delete(id);
         return new ResponseEntity<>("Department removed!", HttpStatus.OK);
 

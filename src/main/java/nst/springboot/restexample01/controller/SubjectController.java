@@ -76,7 +76,7 @@ public class SubjectController {
         }*/
         
         subjectService.delete(id);
-        return new ResponseEntity<>("Department removed!", HttpStatus.OK);
+        return new ResponseEntity<>("Subject removed!", HttpStatus.OK);
 
     }
     

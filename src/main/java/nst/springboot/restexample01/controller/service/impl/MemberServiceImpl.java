@@ -17,7 +17,9 @@ import nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter
 import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
 import nst.springboot.restexample01.dto.MemberDto;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -41,6 +43,8 @@ public class MemberServiceImpl implements MemberService {
          if (memberDto.getDepartmentDto()==null){
              throw new Exception("You can not save a member without an existing department!");
          }
+         
+      
             Member member = memberConverter.toEntity(memberDto);
             member = memberRepository.save(member);
             return memberConverter.toDto(member);

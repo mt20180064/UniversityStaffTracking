@@ -4,13 +4,18 @@
  */
 package nst.springboot.restexample01.controller;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import nst.springboot.restexample01.controller.domain.AcademicTitle;
 import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.service.AcademicTitleHistoryService;
+import nst.springboot.restexample01.controller.service.AcademicTitleService;
 import nst.springboot.restexample01.controller.service.MemberService;
 import nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
@@ -38,12 +43,15 @@ public class MemberController {
     private final MemberConverter memberConverter;
     private final AcademicTitleHistoryService academicTitleHistoryService;
     private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
+    private final AcademicTitleService academicTitleService;
+    List<AcademicTitleHistory> historiesofall= new LinkedList<>();
     
-    public MemberController(nst.springboot.restexample01.controller.service.MemberService memberService, AcademicTitleHistoryService academicTitleHistoryService, MemberConverter memberConverter, AcademicTitleHistoryConverter academicTitleHistoryConverter) {
+    public MemberController(nst.springboot.restexample01.controller.service.MemberService memberService, AcademicTitleHistoryService academicTitleHistoryService, MemberConverter memberConverter, AcademicTitleHistoryConverter academicTitleHistoryConverter, nst.springboot.restexample01.controller.service.AcademicTitleService academicTitleService) {
         this.memberService = memberService;
         this.academicTitleHistoryService = academicTitleHistoryService;
         this.memberConverter=memberConverter;
         this.academicTitleHistoryConverter=academicTitleHistoryConverter;
+        this.academicTitleService = academicTitleService;
     }
    private final MemberService memberService;
    
@@ -69,31 +77,29 @@ public class MemberController {
       
     }
     
-   @PutMapping("/newATH")
-public ResponseEntity<MemberDto> updateAcademicTitleHistory(@RequestParam Long memberId, @RequestBody AcademicTitleHistory ath) throws Exception {
-    MemberDto m = memberService.findById(memberId);
-    Member member = memberConverter.toEntity(m);
-
-    // Create AcademicTitleHistory instance without saving it yet
-    AcademicTitleHistory current = new AcademicTitleHistory(member, LocalDate.now(), LocalDate.now(), m.getAcademic_title(), m.getScientific_field());
-
-    // Save AcademicTitleHistory first
-    AcademicTitleHistoryDto athd = academicTitleHistoryService.save(academicTitleHistoryConverter.toDto(current));
-
-    // Update Member with AcademicTitleHistory reference
-    m.setAcademic_title(ath.getAcademicTitle());
-    m.setScientific_field(ath.getScientificField());
-
-    // Add AcademicTitleHistory to Member's collection
-    m.getAcademicTitleHistories().add(current);
-
-    // Set the Member for the AcademicTitleHistory
-    current.setMember(member);
-
-    // Save the updated Member
-    MemberDto finalMember = memberService.save(m);
-
-    return new ResponseEntity<>(finalMember, HttpStatus.OK);
-}
+    @PutMapping("/updateTitle")
+  public ResponseEntity <MemberDto> updateTitle (@RequestParam Long id, @RequestParam Long at) throws Exception{
+     MemberDto m = memberService.findById(id);
+       
+     AcademicTitle old = m.getAcademic_title();
+        
+     AcademicTitle academicTitle= academicTitleService.findById(at);
+        
+     m.setAcademic_title(academicTitle);
+      
+      
+    AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(9l, memberConverter.toEntity(m), LocalDate.now(), LocalDate.now(), old, m.getScientific_field());
+        System.out.println(ath);
+     //m.getAcademicTitleHistories().add(academicTitleHistoryConverter.toEntity(ath));
+        System.out.println("ovde");
+     MemberDto me = memberService.save(m);
+     System.out.println(me.getFirstname());
+        System.out.println(me.getLastname());
+        System.out.println(me.getAcademic_title().getName());
+        System.out.println("sredjeni dto:"+me);
+     AcademicTitleHistoryDto d = academicTitleHistoryService.save(ath);
+     return new ResponseEntity<>(me, HttpStatus.OK);
+  }
    
+  
 }
