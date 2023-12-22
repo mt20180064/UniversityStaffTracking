@@ -64,7 +64,7 @@ public class MemberController {
     @GetMapping("/findmember")
     public ResponseEntity<MemberDto> findById (@RequestParam Long id) throws Exception{
         MemberDto m = memberService.findById(id);
-        System.out.println(m);
+        
             return new ResponseEntity<>(m, HttpStatus.FOUND);
       
     }

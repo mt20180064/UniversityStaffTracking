@@ -28,12 +28,10 @@ public class SecretaryHistory {
     
     @ManyToOne
     @JoinColumn(name = "member_id")
-    @JsonIgnore
     private Member member_id;
     
     @ManyToOne
     @JoinColumn(name = "department_id")
-    @JsonIgnore
     private Department department_id;
     
     @Column(name="start_date")
@@ -62,6 +60,11 @@ public class SecretaryHistory {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "SecretaryHistory{" + "id=" + id + ", member_id=" + member_id + ", department_id=" + department_id + ", start_date=" + start_date + ", end_date=" + end_date + '}';
     }
 
     public void setId(Long id) {

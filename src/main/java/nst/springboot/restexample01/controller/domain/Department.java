@@ -38,6 +38,10 @@ public class Department {
      @JsonIgnore
     private List<Member> members;
     
+     @OneToMany(mappedBy="department")
+     @JsonIgnore
+     private List<Subject> subjects;
+     
      @ManyToOne
     @JoinColumn(name = "manager_id")
      @JsonIgnore
@@ -46,26 +50,32 @@ public class Department {
     @JoinColumn(name = "secretary_id")
      @JsonIgnore
      private Member secretary;
-     
-     @OneToMany(mappedBy = "department_id")
-     @JsonIgnore
-     private List<SecretaryHistory> secretaryHistories;
      @OneToMany(mappedBy = "department_id")
      @JsonIgnore
      private List<ManagerHistory> managerHistories;
+     @OneToMany(mappedBy = "department_id")
+     @JsonIgnore
+     private List<SecretaryHistory> secretaryHistories;
+     
+     
      
     public Department() {
     }
 
-    public Department(Long id, String name, List<Member> members, Member manager, Member secretary, List<SecretaryHistory> secretaryHistories, List<ManagerHistory> managerHistories) {
+    public Department(Long id, String name, List<Member> members, List<Subject> subjects, Member manager, Member secretary, List<ManagerHistory> managerHistories, List<SecretaryHistory> secretaryHistories) {
         this.id = id;
         this.name = name;
         this.members = members;
+        this.subjects = subjects;
         this.manager = manager;
         this.secretary = secretary;
-        this.secretaryHistories = secretaryHistories;
         this.managerHistories = managerHistories;
+        this.secretaryHistories = secretaryHistories;
     }
+
+  
+
+   
 
    
 
@@ -125,6 +135,14 @@ public class Department {
 
     public void setMembers(List<Member> members) {
         this.members = members;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
     

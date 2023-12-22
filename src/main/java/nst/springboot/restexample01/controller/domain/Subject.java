@@ -35,7 +35,7 @@ public class Subject implements Serializable {
     @Column(name = "espb")
     private int esbp;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 

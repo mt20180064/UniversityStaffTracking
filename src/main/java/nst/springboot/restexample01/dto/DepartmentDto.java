@@ -12,6 +12,7 @@ import javax.print.attribute.standard.Severity;
 import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.SecretaryHistory;
+import nst.springboot.restexample01.controller.domain.Subject;
 
 /**
  *
@@ -24,6 +25,7 @@ public class DepartmentDto implements Serializable{
     @Size(min = 2,max = 10, message = "Broj znakova [2-10]")
     private String name;
     private List<Member> members;
+    private List<Subject> subjects;
     private Member manager_id;
     private Member secretary_id;
     
@@ -32,15 +34,17 @@ public class DepartmentDto implements Serializable{
     public DepartmentDto() {
     }
 
-    public DepartmentDto(Long id, String name, List<Member> members, Member manager_id, Member secretary_id, List<ManagerHistory> managerHistories, List<SecretaryHistory> secretaryHistories) {
+    public DepartmentDto(Long id, String name, List<Member> members, List<Subject> subjects, Member manager_id, Member secretary_id, List<ManagerHistory> managerHistories, List<SecretaryHistory> secretaryHistories) {
         this.id = id;
         this.name = name;
         this.members = members;
+        this.subjects = subjects;
         this.manager_id = manager_id;
         this.secretary_id = secretary_id;
         this.managerHistories = managerHistories;
         this.secretaryHistories = secretaryHistories;
     }
+
 
     
 
@@ -62,6 +66,11 @@ public class DepartmentDto implements Serializable{
 
     public List<Member> getMembers() {
         return members;
+    }
+
+    @Override
+    public String toString() {
+        return "DepartmentDto{" + "id=" + id + ", name=" + name + ", members=" + members + ", manager_id=" + manager_id + ", secretary_id=" + secretary_id + ", managerHistories=" + managerHistories + ", secretaryHistories=" + secretaryHistories + '}';
     }
 
     public void setMembers(List<Member> members) {
@@ -107,6 +116,14 @@ public class DepartmentDto implements Serializable{
 
     public void setSecretaryHistories(List<SecretaryHistory> secretaryHistories) {
         this.secretaryHistories = secretaryHistories;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
  

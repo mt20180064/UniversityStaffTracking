@@ -50,6 +50,11 @@ public class ManagerHistory {
         this.end_date = end_date;
     }
 
+    @Override
+    public String toString() {
+        return "ManagerHistory{" + "id=" + id + ", member_id=" + member_id + ", department_id=" + department_id + ", start_date=" + start_date + ", end_date=" + end_date + '}';
+    }
+
     public Long getId() {
         return id;
     }

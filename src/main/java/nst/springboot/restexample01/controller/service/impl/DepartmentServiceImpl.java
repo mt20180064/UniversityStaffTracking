@@ -15,6 +15,8 @@ import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -34,6 +36,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional 
     public DepartmentDto save(DepartmentDto departmentDto) throws Exception {
         Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
         if (dept.isPresent()) {
@@ -72,7 +75,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
-            
+            System.out.println(department.getManagerHistories());
+            System.out.println(department.getSecretaryHistories());
             return departmentConverter.toDto(department);
             
         } else {
