@@ -22,7 +22,6 @@ public class DepartmentDto implements Serializable{
     private Long id;
     
     @NotNull
-    @Size(min = 2,max = 10, message = "Broj znakova [2-10]")
     private String name;
     private List<Member> members;
     private List<Subject> subjects;

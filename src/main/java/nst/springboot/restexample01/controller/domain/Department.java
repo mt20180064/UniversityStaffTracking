@@ -5,6 +5,7 @@
 package nst.springboot.restexample01.controller.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,6 @@ public class Department {
     private Long id;
     
     @NotEmpty(message = "Ime je obavezno polje")
-    @Size(min = 2, max = 10, message = "Broj znakova je od 2 do 10")
     @Column(name = "name")
     private String name;
 

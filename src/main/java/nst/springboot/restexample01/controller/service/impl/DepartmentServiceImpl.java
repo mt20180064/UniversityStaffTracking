@@ -7,6 +7,7 @@ package nst.springboot.restexample01.controller.service.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.crypto.Mac;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.repository.DepartmentRepository;
 import nst.springboot.restexample01.controller.service.DepartmentService;
@@ -36,18 +37,18 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    @Transactional 
+    @Transactional
     public DepartmentDto save(DepartmentDto departmentDto) throws Exception {
-        Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
-        if (dept.isPresent()) {
-            throw new DepartmentAlreadyExistException("Department sa tim imenom postoji!");
-        } else {
+      //  Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
+       // if (dept.isPresent()) {
+         //   throw new DepartmentAlreadyExistException("Department sa tim imenom postoji!");
+       // } else {
             //DTO - > Entity
             //Department department = new Department(departmentDto.getId(), departmentDto.getName());
             Department department = departmentConverter.toEntity(departmentDto);
             department = departmentRepository.save(department);
             return departmentConverter.toDto(department);
-        }
+        //}
     }
 
     @Override
@@ -64,11 +65,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    @Override
-    public void update(DepartmentDto department) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+   
     @Override
     public DepartmentDto findById(Long id) throws Exception {
         Optional<Department> dept = departmentRepository.findById(id);

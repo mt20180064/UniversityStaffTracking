@@ -5,13 +5,21 @@
 package nst.springboot.restexample01.controller;
 
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.service.DepartmentService;
+import nst.springboot.restexample01.controller.service.ManagerHistoryService;
+import nst.springboot.restexample01.controller.service.MemberService;
 import nst.springboot.restexample01.controller.service.SubjectService;
+import nst.springboot.restexample01.converter.impl.DepartmentConverter;
+import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
+import nst.springboot.restexample01.dto.ManagerHistoryDto;
+import nst.springboot.restexample01.dto.MemberDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +27,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,13 +49,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class DepartmentController {
 
     private final DepartmentService departmentService;
-    
+    private final MemberService memberService;
+    private final MemberConverter memberConverter;
+    private final DepartmentConverter departmentConverter;
+    private final ManagerHistoryService managerHistoryService;
 
-    public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(DepartmentService departmentService, nst.springboot.restexample01.controller.service.MemberService memberService, MemberConverter memberConverter,DepartmentConverter departmentConverter, ManagerHistoryService managerHistoryService) {
         this.departmentService = departmentService;
 
         System.out.println("nst.springboot.restexample01.controller.DepartmentController.<init>()");
         System.out.println("kreiran je konroller!");
+        this.memberService = memberService;
+        this.memberConverter=memberConverter;
+        this.departmentConverter=departmentConverter;
+        this.managerHistoryService= managerHistoryService;
     }
 
     //dodaj novi department
@@ -115,6 +133,24 @@ public class DepartmentController {
 
     }
 
+    @PutMapping("/updateManager{id}")
+    public ResponseEntity<DepartmentDto> updateManager(@PathVariable Long id, @RequestParam Long idman) throws Exception{
+       DepartmentDto m = departmentService.findById(id);
+       Member old = m.getManager_id();
+     MemberDto ne= memberService.findById(idman);
+     if (!m.getMembers().contains(memberConverter.toEntity(ne))){
+         throw new Exception ("this member does not belong to the wanted department!");
+     }
+        System.out.println(ne.getFirstname());
+     m.setManager_id(memberConverter.toEntity(ne));
+        System.out.println(m.getManager_id().getFirstname());
+        
+     DepartmentDto med = departmentService.save(m);
+     ManagerHistory mhd = new ManagerHistory(9l, old, departmentConverter.toEntity(m), LocalDate.now(), LocalDate.now());
+     ManagerHistory mh = managerHistoryService.save(mhd);
+        System.out.println("sacuvano i u istoriju");
+     return new ResponseEntity<>(med, HttpStatus.OK);
+    }
     /*
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MyErrorDetails> handleException(Exception e){

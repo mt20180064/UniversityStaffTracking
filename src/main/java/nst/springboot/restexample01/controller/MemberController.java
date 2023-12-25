@@ -44,7 +44,7 @@ public class MemberController {
     private final AcademicTitleHistoryService academicTitleHistoryService;
     private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
     private final AcademicTitleService academicTitleService;
-    List<AcademicTitleHistory> historiesofall= new LinkedList<>();
+    
     
     public MemberController(nst.springboot.restexample01.controller.service.MemberService memberService, AcademicTitleHistoryService academicTitleHistoryService, MemberConverter memberConverter, AcademicTitleHistoryConverter academicTitleHistoryConverter, nst.springboot.restexample01.controller.service.AcademicTitleService academicTitleService) {
         this.memberService = memberService;
@@ -87,16 +87,9 @@ public class MemberController {
         
      m.setAcademic_title(academicTitle);
       
-      
     AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(9l, memberConverter.toEntity(m), LocalDate.now(), LocalDate.now(), old, m.getScientific_field());
-        System.out.println(ath);
-     //m.getAcademicTitleHistories().add(academicTitleHistoryConverter.toEntity(ath));
-        System.out.println("ovde");
+       
      MemberDto me = memberService.save(m);
-     System.out.println(me.getFirstname());
-        System.out.println(me.getLastname());
-        System.out.println(me.getAcademic_title().getName());
-        System.out.println("sredjeni dto:"+me);
      AcademicTitleHistoryDto d = academicTitleHistoryService.save(ath);
      return new ResponseEntity<>(me, HttpStatus.OK);
   }

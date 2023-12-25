@@ -20,7 +20,7 @@ public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
     private DepartmentConverter departmentConverter;
     @Override
     public MemberDto toDto(Member e) {
-        System.out.println("u converteru saM");
+       
         return new MemberDto(
                 e.getId(), 
                 e.getFirstname(),e.getLastname(), e.getAcademic_title(),e.getEducation_title(), e.getScientific_field(), 

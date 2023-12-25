@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.controller.service;
 
+import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.repository.ManagerHistoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +14,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ManagerHistoryService {
-  
+  ManagerHistory save (ManagerHistory managerHistory);
 }

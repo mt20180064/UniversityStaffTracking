@@ -4,8 +4,11 @@
  */
 package nst.springboot.restexample01.controller.service.impl;
 
+import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.repository.ManagerHistoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -18,4 +21,10 @@ public class ManagerHistoryServiceImpl implements nst.springboot.restexample01.c
         this.managerHistoryRepository = managerHistoryRepository;
     }
      private final ManagerHistoryRepository managerHistoryRepository;
+
+    @Override
+    @Transactional
+    public ManagerHistory save(ManagerHistory managerHistory) {
+        return managerHistoryRepository.save(managerHistory);
+    }
 }

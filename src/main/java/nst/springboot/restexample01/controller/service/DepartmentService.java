@@ -16,6 +16,5 @@ public interface DepartmentService {
     List<DepartmentDto> getAll(Pageable pageable);
     List<DepartmentDto> getAll();
     void delete(Long id) throws Exception;
-    void update(DepartmentDto department) throws Exception;
     DepartmentDto findById(Long id) throws Exception;
 }
