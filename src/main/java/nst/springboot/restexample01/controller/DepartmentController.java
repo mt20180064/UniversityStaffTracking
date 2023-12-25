@@ -150,7 +150,7 @@ public class DepartmentController {
         System.out.println(m.getManager_id().getFirstname());
         
      DepartmentDto med = departmentService.save(m);
-     ManagerHistory mhd = new ManagerHistory(9l, old, departmentConverter.toEntity(m), LocalDate.now(), LocalDate.now());
+     ManagerHistory mhd = new ManagerHistory(9l, old, departmentConverter.toEntity(m), m.getManagerHistories().get(m.getManagerHistories().size()-1).getEnd_date(), LocalDate.now());
      ManagerHistory mh = managerHistoryService.save(mhd);
         System.out.println("sacuvano i u istoriju");
      return new ResponseEntity<>(med, HttpStatus.OK);
@@ -165,7 +165,7 @@ public class DepartmentController {
      }
          dep.setManager_id(memberConverter.toEntity(sec));
          DepartmentDto newdep = departmentService.save(dep);
-         SecretaryHistory sh = new SecretaryHistory(9l, old,departmentConverter.toEntity(dep), LocalDate.now(), LocalDate.now());
+         SecretaryHistory sh = new SecretaryHistory(9l, old,departmentConverter.toEntity(dep), dep.getSecretaryHistories().get(dep.getManagerHistories().size()-1).getEnd_date(), LocalDate.now());
          SecretaryHistory s = secretaryHistoryService.save(sh);
          return new ResponseEntity<>(newdep, HttpStatus.OK);
      }

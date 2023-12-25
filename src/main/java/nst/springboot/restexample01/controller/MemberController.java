@@ -80,15 +80,10 @@ public class MemberController {
     @PutMapping("/updateTitle")
   public ResponseEntity <MemberDto> updateTitle (@RequestParam Long id, @RequestParam Long at) throws Exception{
      MemberDto m = memberService.findById(id);
-       
      AcademicTitle old = m.getAcademic_title();
-        
      AcademicTitle academicTitle= academicTitleService.findById(at);
-        
      m.setAcademic_title(academicTitle);
-      
-    AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(9l, memberConverter.toEntity(m), LocalDate.now(), LocalDate.now(), old, m.getScientific_field());
-       
+    AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(9l, memberConverter.toEntity(m), m.getAcademicTitleHistories().get(m.getAcademicTitleHistories().size()-1).getEndDate(), LocalDate.now(), old, m.getScientific_field());
      MemberDto me = memberService.save(m);
      AcademicTitleHistoryDto d = academicTitleHistoryService.save(ath);
      return new ResponseEntity<>(me, HttpStatus.OK);

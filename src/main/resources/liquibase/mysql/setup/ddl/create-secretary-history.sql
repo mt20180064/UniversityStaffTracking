@@ -1,7 +1,7 @@
 create table tbl_secretary_history(
 	id bigint unsigned not null AUTO_INCREMENT,
 	start_date datetime not null,
-        end_date datetime not null,
+        end_date datetime,
         member_id bigint unsigned,
         department_id bigint unsigned,
 	primary key (id),
