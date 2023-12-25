@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.controller.service;
 
+import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface SecretaryHistoryService {
-    
+    SecretaryHistory save (SecretaryHistory secretaryHistory);
 }

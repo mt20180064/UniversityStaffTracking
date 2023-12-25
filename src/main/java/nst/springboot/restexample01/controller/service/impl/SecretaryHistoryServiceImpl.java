@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.controller.service.impl;
 
+import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,9 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService{
         this.secretaryHistoryRepository = secretaryHistoryRepository;
     }
     private final SecretaryHistoryRepository secretaryHistoryRepository;
+
+    @Override
+    public SecretaryHistory save(SecretaryHistory secretaryHistory) {
+       return secretaryHistoryRepository.save (secretaryHistory);
+    }
 }

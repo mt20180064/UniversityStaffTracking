@@ -10,10 +10,12 @@ import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.controller.service.ManagerHistoryService;
 import nst.springboot.restexample01.controller.service.MemberService;
+import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.controller.service.SubjectService;
 import nst.springboot.restexample01.converter.impl.DepartmentConverter;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
@@ -53,8 +55,9 @@ public class DepartmentController {
     private final MemberConverter memberConverter;
     private final DepartmentConverter departmentConverter;
     private final ManagerHistoryService managerHistoryService;
+    private final SecretaryHistoryService secretaryHistoryService;
 
-    public DepartmentController(DepartmentService departmentService, nst.springboot.restexample01.controller.service.MemberService memberService, MemberConverter memberConverter,DepartmentConverter departmentConverter, ManagerHistoryService managerHistoryService) {
+    public DepartmentController(DepartmentService departmentService, nst.springboot.restexample01.controller.service.MemberService memberService, MemberConverter memberConverter, DepartmentConverter departmentConverter, ManagerHistoryService managerHistoryService, nst.springboot.restexample01.controller.service.SecretaryHistoryService secretaryHistoryService) {
         this.departmentService = departmentService;
 
         System.out.println("nst.springboot.restexample01.controller.DepartmentController.<init>()");
@@ -63,6 +66,7 @@ public class DepartmentController {
         this.memberConverter=memberConverter;
         this.departmentConverter=departmentConverter;
         this.managerHistoryService= managerHistoryService;
+        this.secretaryHistoryService = secretaryHistoryService;
     }
 
     //dodaj novi department
@@ -151,6 +155,21 @@ public class DepartmentController {
         System.out.println("sacuvano i u istoriju");
      return new ResponseEntity<>(med, HttpStatus.OK);
     }
+    @PutMapping("/updateSecretary{id}")
+    public ResponseEntity<DepartmentDto> updateSecretary(@PathVariable Long id, @RequestParam Long idsec) throws Exception{
+        DepartmentDto dep = departmentService.findById(id);
+       Member old = dep.getSecretary_id();
+        MemberDto sec= memberService.findById(idsec);
+     if (!dep.getMembers().contains(memberConverter.toEntity(sec))){
+       throw new Exception("Requested member does not belong to that department");
+     }
+         dep.setManager_id(memberConverter.toEntity(sec));
+         DepartmentDto newdep = departmentService.save(dep);
+         SecretaryHistory sh = new SecretaryHistory(9l, old,departmentConverter.toEntity(dep), LocalDate.now(), LocalDate.now());
+         SecretaryHistory s = secretaryHistoryService.save(sh);
+         return new ResponseEntity<>(newdep, HttpStatus.OK);
+     }
+    
     /*
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MyErrorDetails> handleException(Exception e){
