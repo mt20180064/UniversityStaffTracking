@@ -8,6 +8,7 @@ import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -22,6 +23,7 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService{
     private final SecretaryHistoryRepository secretaryHistoryRepository;
 
     @Override
+    @Transactional
     public SecretaryHistory save(SecretaryHistory secretaryHistory) {
        return secretaryHistoryRepository.save (secretaryHistory);
     }

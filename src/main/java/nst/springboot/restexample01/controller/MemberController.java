@@ -83,7 +83,16 @@ public class MemberController {
      AcademicTitle old = m.getAcademic_title();
      AcademicTitle academicTitle= academicTitleService.findById(at);
      m.setAcademic_title(academicTitle);
-    AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(9l, memberConverter.toEntity(m), m.getAcademicTitleHistories().get(m.getAcademicTitleHistories().size()-1).getEndDate(), LocalDate.now(), old, m.getScientific_field());
+     int duzinaliste = m.getAcademicTitleHistories().size();
+     
+          LocalDate ds;   
+     if (duzinaliste>0){
+      ds = m.getAcademicTitleHistories().get(duzinaliste-1).getEndDate();
+  } 
+     else {
+          ds = m.getTitle_start();
+     }
+    AcademicTitleHistoryDto ath = new AcademicTitleHistoryDto(90l, memberConverter.toEntity(m), ds, LocalDate.now(), old, m.getScientific_field());
      MemberDto me = memberService.save(m);
      AcademicTitleHistoryDto d = academicTitleHistoryService.save(ath);
      return new ResponseEntity<>(me, HttpStatus.OK);

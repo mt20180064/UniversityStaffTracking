@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.beans.Transient;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,16 +53,16 @@ public class Member {
     @JsonIgnore
     private Department department;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     @JsonIgnore
     private List<AcademicTitleHistory> academicTitleHistories;
+    
+    @Column(name="title_start")
+    private LocalDate title_start;
+    
+    
     public Member() {
     }
-
-  
-   
-
-  
 
     public String getFirstname() {
         return firstname;
@@ -99,9 +101,7 @@ public class Member {
         return Objects.equals(this.id, other.id);
     }
 
-   
-
-    public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories) {
+    public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -110,7 +110,12 @@ public class Member {
         this.scientific_field = scientific_field;
         this.department = department;
         this.academicTitleHistories = academicTitleHistories;
+        this.title_start = title_start;
     }
+
+   
+
+ 
 
    
 
@@ -160,6 +165,14 @@ public class Member {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDate getTitle_start() {
+        return title_start;
+    }
+
+    public void setTitle_start(LocalDate title_start) {
+        this.title_start = title_start;
     }
     
     

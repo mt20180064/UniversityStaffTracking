@@ -48,6 +48,7 @@ private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
     }
 
     @Override
+    @Transactional
     public AcademicTitleHistoryDto save(AcademicTitleHistoryDto academicTitleHistoryDto) throws Exception {
           AcademicTitleHistory a = academicTitleHistoryConverter.toEntity(academicTitleHistoryDto);
         System.out.println(a);

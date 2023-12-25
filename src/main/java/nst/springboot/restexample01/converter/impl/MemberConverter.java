@@ -24,7 +24,7 @@ public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
         return new MemberDto(
                 e.getId(), 
                 e.getFirstname(),e.getLastname(), e.getAcademic_title(),e.getEducation_title(), e.getScientific_field(), 
-                departmentConverter.toDto(e.getDepartment()), e.getAcademicTitleHistories()
+                departmentConverter.toDto(e.getDepartment()), e.getAcademicTitleHistories(), e.getTitle_start()
         );
     }
 
@@ -34,7 +34,7 @@ public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
                 t.getId(), t.getFirstname(),t.getLastname(),t.getAcademic_title(),
                 t.getEducation_title(),
                 t.getScientific_field(),
-        departmentConverter.toEntity(t.getDepartmentDto()), t.getAcademicTitleHistories());
+        departmentConverter.toEntity(t.getDepartmentDto()), t.getAcademicTitleHistories(), t.getTitle_start());
     }
     
 }

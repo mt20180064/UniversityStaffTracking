@@ -39,12 +39,11 @@ public class MemberServiceImpl implements MemberService {
         this.academicTitleHistoryConverter = academicTitleHistoryConverter;
     }
     @Override
+    @Transactional
     public MemberDto save(MemberDto memberDto) throws Exception {
          if (memberDto.getDepartmentDto()==null){
              throw new Exception("You can not save a member without an existing department!");
          }
-         
-      
             Member member = memberConverter.toEntity(memberDto);
             member = memberRepository.save(member);
             return memberConverter.toDto(member);

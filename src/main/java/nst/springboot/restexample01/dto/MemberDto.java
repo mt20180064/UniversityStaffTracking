@@ -5,6 +5,7 @@
 package nst.springboot.restexample01.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.AcademicTitle;
 import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
@@ -25,13 +26,11 @@ public class MemberDto implements Serializable{
     private ScientificField scientific_field;
     private DepartmentDto departmentDto;
     private List<AcademicTitleHistory> academicTitleHistories;
-
+    private LocalDate title_start;
     public MemberDto() {
     }
 
-   
-
-    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, DepartmentDto departmentDto, List<AcademicTitleHistory> academicTitleHistories) {
+    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, DepartmentDto departmentDto, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -40,7 +39,11 @@ public class MemberDto implements Serializable{
         this.scientific_field = scientific_field;
         this.departmentDto = departmentDto;
         this.academicTitleHistories = academicTitleHistories;
+        this.title_start = title_start;
     }
+
+   
+
 
   
 
@@ -111,6 +114,14 @@ public class MemberDto implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDate getTitle_start() {
+        return title_start;
+    }
+
+    public void setTitle_start(LocalDate title_start) {
+        this.title_start = title_start;
     }
 
     

@@ -39,16 +39,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     @Transactional
     public DepartmentDto save(DepartmentDto departmentDto) throws Exception {
-      //  Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
-       // if (dept.isPresent()) {
-         //   throw new DepartmentAlreadyExistException("Department sa tim imenom postoji!");
-       // } else {
+
             //DTO - > Entity
             //Department department = new Department(departmentDto.getId(), departmentDto.getName());
             Department department = departmentConverter.toEntity(departmentDto);
             department = departmentRepository.save(department);
             return departmentConverter.toDto(department);
-        //}
+        
     }
 
     @Override
