@@ -148,9 +148,15 @@ public class DepartmentController {
         System.out.println(ne.getFirstname());
      m.setManager_id(memberConverter.toEntity(ne));
         System.out.println(m.getManager_id().getFirstname());
-        
+        LocalDate ld;
+        int duzinaliste = m.getManagerHistories().size();
+        if (duzinaliste>0){
+            ld = m.getManagerHistories().get(duzinaliste-1).getEnd_date();
+        } else{
+            ld = LocalDate.now();
+        }
      DepartmentDto med = departmentService.save(m);
-     ManagerHistory mhd = new ManagerHistory(200l, old, departmentConverter.toEntity(m), LocalDate.now(), LocalDate.now());
+     ManagerHistory mhd = new ManagerHistory(200l, old, departmentConverter.toEntity(m), ld, LocalDate.now());
      ManagerHistory mh = managerHistoryService.save(mhd);
         System.out.println("sacuvano i u istoriju");
      return new ResponseEntity<>(med, HttpStatus.OK);
@@ -165,7 +171,14 @@ public class DepartmentController {
      }
          dep.setSecretary_id(memberConverter.toEntity(sec));
          DepartmentDto newdep = departmentService.save(dep);
-         SecretaryHistory sh = new SecretaryHistory(300l, old,departmentConverter.toEntity(dep), LocalDate.now(), LocalDate.now());
+          LocalDate ld;
+        int duzinaliste = dep.getSecretaryHistories().size();
+        if (duzinaliste>0){
+            ld = dep.getSecretaryHistories().get(duzinaliste-1).getEnd_date();
+        } else{
+            ld = LocalDate.now();
+        }
+         SecretaryHistory sh = new SecretaryHistory(300l, old,departmentConverter.toEntity(dep), ld, LocalDate.now());
          SecretaryHistory s = secretaryHistoryService.save(sh);
          return new ResponseEntity<>(newdep, HttpStatus.OK);
      }
