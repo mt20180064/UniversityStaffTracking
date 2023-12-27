@@ -136,4 +136,14 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .stream().map(entity -> departmentConverter.toDto(entity))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public DepartmentDto update(DepartmentDto departmentDto) throws Exception {
+       
+            Department department = departmentConverter.toEntity(departmentDto);
+            department = departmentRepository.save(department);
+         
+            return departmentConverter.toDto(department);
+    }
 }

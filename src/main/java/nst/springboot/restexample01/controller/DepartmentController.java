@@ -156,7 +156,7 @@ public class DepartmentController {
         } else{
             ld = LocalDate.now();
         }
-     DepartmentDto med = departmentService.save(m);
+     DepartmentDto med = departmentService.update(m);
      ManagerHistory mhd = new ManagerHistory(200l, old, departmentConverter.toEntity(m), ld, LocalDate.now());
      ManagerHistory mh = managerHistoryService.save(mhd);
         System.out.println("sacuvano i u istoriju");
@@ -171,7 +171,7 @@ public class DepartmentController {
        throw new Exception("Requested member does not belong to that department");
      }
          dep.setSecretary_id(memberConverter.toEntity(sec));
-         DepartmentDto newdep = departmentService.save(dep);
+         DepartmentDto newdep = departmentService.update(dep);
           LocalDate ld;
         int duzinaliste = dep.getSecretaryHistories().size();
         if (duzinaliste>0){

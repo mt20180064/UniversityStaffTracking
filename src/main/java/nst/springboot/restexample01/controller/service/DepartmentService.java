@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface DepartmentService {
     DepartmentDto save(DepartmentDto departmentDto) throws Exception;
+    DepartmentDto update (DepartmentDto departmentDto) throws Exception;
     List<DepartmentDto> getAll(Pageable pageable);
     List<DepartmentDto> getAll();
     void delete(Long id) throws Exception;
