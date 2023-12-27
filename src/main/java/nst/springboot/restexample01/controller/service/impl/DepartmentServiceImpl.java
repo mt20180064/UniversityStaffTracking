@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.repository.DepartmentRepository;
 import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.converter.impl.DepartmentConverter;
@@ -55,6 +57,17 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
+            if (!department.getMembers().isEmpty()){
+                for (Member member : department.getMembers()) {
+                    member.setDepartment(null);
+                }
+            }
+            if (!department.getSubjects().isEmpty()){
+                for (Subject subject : department.getSubjects()) {
+                    subject.setDepartment(null);
+                }
+            }
+            
             departmentRepository.delete(department);
         } else {
             throw new Exception("Department does not exist!");

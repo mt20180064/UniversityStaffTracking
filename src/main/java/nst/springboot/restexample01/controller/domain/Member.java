@@ -53,7 +53,7 @@ public class Member {
     @JsonIgnore
     private Department department;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AcademicTitleHistory> academicTitleHistories;
     
@@ -81,25 +81,21 @@ public class Member {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Member member = (Member) o;
+
+        return id != null ? id.equals(member.id) : member.id == null;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Member other = (Member) obj;
-        return Objects.equals(this.id, other.id);
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
+
+    
 
     public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start) {
         this.id = id;

@@ -24,6 +24,7 @@ import nst.springboot.restexample01.dto.MemberDto;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,6 +68,15 @@ public class MemberController {
     public ResponseEntity<MemberDto> save (@Valid @RequestBody MemberDto memberDto) throws Exception{
         MemberDto m = memberService.save(memberDto);
         return new ResponseEntity<>(m,HttpStatus.CREATED);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
+     
+     
+        memberService.delete(id);
+        return new ResponseEntity<>("Member removed!", HttpStatus.OK);
+
     }
     
     @GetMapping("/findmember")

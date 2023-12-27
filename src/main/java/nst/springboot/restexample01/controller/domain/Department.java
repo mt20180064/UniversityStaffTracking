@@ -38,22 +38,22 @@ public class Department {
      @JsonIgnore
     private List<Member> members;
     
-     @OneToMany(mappedBy="department")
+     @OneToMany(mappedBy="department", cascade=CascadeType.PERSIST)
      @JsonIgnore
      private List<Subject> subjects;
      
      @ManyToOne
-    @JoinColumn(name = "manager_id")
+     @JoinColumn(name = "manager_id")
      @JsonIgnore
      private Member manager;
      @ManyToOne
     @JoinColumn(name = "secretary_id")
      @JsonIgnore
      private Member secretary;
-     @OneToMany(mappedBy = "department_id")
+     @OneToMany(mappedBy = "department_id", cascade = CascadeType.ALL)
      @JsonIgnore
      private List<ManagerHistory> managerHistories;
-     @OneToMany(mappedBy = "department_id")
+     @OneToMany(mappedBy = "department_id", cascade = CascadeType.ALL)
      @JsonIgnore
      private List<SecretaryHistory> secretaryHistories;
      
