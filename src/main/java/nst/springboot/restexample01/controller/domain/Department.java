@@ -42,7 +42,7 @@ public class Department {
      @JsonIgnore
      private List<Subject> subjects;
      
-     @ManyToOne
+     @ManyToOne 
      @JoinColumn(name = "manager_id")
      @JsonIgnore
      private Member manager;

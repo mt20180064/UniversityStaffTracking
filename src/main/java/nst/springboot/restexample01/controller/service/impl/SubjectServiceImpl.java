@@ -46,6 +46,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public SubjectDto save(SubjectDto subjectDto) throws Exception {
         //sacuvaj subject
+        
         Subject subject = subjectConverter.toEntity(subjectDto);
         if(subject.getDepartment().getId()==null){
             departmentRepository.save(subject.getDepartment());

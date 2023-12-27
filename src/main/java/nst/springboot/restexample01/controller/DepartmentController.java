@@ -73,6 +73,7 @@ public class DepartmentController {
     @PostMapping
     public ResponseEntity<DepartmentDto> save(@Valid @RequestBody DepartmentDto departmentDto) throws Exception {
         //ResponseEntity
+        
         DepartmentDto deptDto = departmentService.save(departmentDto);
         return new ResponseEntity<>(deptDto, HttpStatus.CREATED);
     }
