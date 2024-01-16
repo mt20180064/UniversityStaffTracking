@@ -105,6 +105,7 @@ public class MemberServiceImpl implements MemberService {
    
 
     @Override
+    @Transactional
     public void updateAcademicTitleHistory(Member member, AcademicTitleHistoryDto academicTitleHistoryDto) {
         AcademicTitleHistory academicTitleHistory = academicTitleHistoryConverter.toEntity(academicTitleHistoryDto);
         member.getAcademicTitleHistories().add(academicTitleHistory);

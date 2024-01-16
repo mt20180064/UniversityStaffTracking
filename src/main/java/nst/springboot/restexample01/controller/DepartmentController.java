@@ -158,7 +158,8 @@ public class DepartmentController {
         }
      DepartmentDto med = departmentService.update(m);
      ManagerHistory mhd = new ManagerHistory(200l, old, departmentConverter.toEntity(m), ld, LocalDate.now());
-     ManagerHistory mh = managerHistoryService.save(mhd);
+     if (mhd.getMember_id()!=null){
+     ManagerHistory mh = managerHistoryService.save(mhd);}
         System.out.println("sacuvano i u istoriju");
      return new ResponseEntity<>(med, HttpStatus.OK);
     }
@@ -180,9 +181,16 @@ public class DepartmentController {
             ld = LocalDate.now();
         }
          SecretaryHistory sh = new SecretaryHistory(300l, old,departmentConverter.toEntity(dep), ld, LocalDate.now());
-         SecretaryHistory s = secretaryHistoryService.save(sh);
+         if (sh.getMember_id()!=null){
+         SecretaryHistory s = secretaryHistoryService.save(sh);}
          return new ResponseEntity<>(newdep, HttpStatus.OK);
      }
+    
+    @GetMapping("/members")
+    public List<Member> getDepartmentMembers(@RequestParam Long depid) throws Exception{
+        DepartmentDto dep= departmentService.findById(depid);
+        return dep.getMembers();
+    }
     
     /*
     @ExceptionHandler(Exception.class)

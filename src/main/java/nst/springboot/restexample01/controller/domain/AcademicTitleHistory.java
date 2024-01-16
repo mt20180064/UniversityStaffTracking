@@ -27,7 +27,7 @@ public class AcademicTitleHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
