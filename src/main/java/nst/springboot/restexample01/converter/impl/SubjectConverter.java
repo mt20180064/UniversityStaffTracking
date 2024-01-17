@@ -4,8 +4,11 @@
  */
 package nst.springboot.restexample01.converter.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Subject;
+import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.converter.DtoEntityConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.dto.SubjectDto;
@@ -19,6 +22,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SubjectConverter implements DtoEntityConverter<SubjectDto, Subject>{
+
+    public SubjectConverter(nst.springboot.restexample01.controller.service.DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
+    
+    private final DepartmentService departmentService;
     @Autowired
     private DepartmentConverter departmentConverter;
     
@@ -27,20 +36,24 @@ public class SubjectConverter implements DtoEntityConverter<SubjectDto, Subject>
         Department d = entity.getDepartment();
         return new SubjectDto(
                 entity.getId(), 
-                entity.getName(), entity.getEsbp(), 
-                (d!=null ? departmentConverter.toDto(d) : null)
+                entity.getName(), entity.getEsbp(), d.getId(), d.getName()
+                
         );
     }
 
     @Override
     public Subject toEntity(SubjectDto dto) {
-        DepartmentDto d = dto.getDepartmentDto();
-        return new Subject(
-                dto.getId(), 
-                dto.getName(), 
-                dto.getEsbp(),
-                (d!=null ? departmentConverter.toEntity(d) : null)
-        );
+        try {
+            DepartmentDto d = departmentService.findById(dto.getDepartmentId());
+            return new Subject(
+                    dto.getId(),
+                    dto.getName(),
+                    dto.getEsbp(),
+                    (d!=null ? departmentConverter.toEntity(d) : null)
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } return null;
     }
     
 }

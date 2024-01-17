@@ -32,6 +32,7 @@ public class SecretaryHistory {
     
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department_id;
     
     @Column(name="start_date")

@@ -16,14 +16,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecretaryHistoryConverter implements DtoEntityConverter<SecretaryHistoryDto, SecretaryHistory>{
 
+    public SecretaryHistoryConverter(nst.springboot.restexample01.converter.impl.MemberConverter MemberConverter) {
+        this.MemberConverter = MemberConverter;
+    }
+private final MemberConverter MemberConverter;
     @Override
     public SecretaryHistoryDto toDto(SecretaryHistory e) {
-        return new SecretaryHistoryDto (e.getId(), e.getMember_id(), e.getDepartment_id(), e.getStart_date(), e.getEnd_date());
+        return new SecretaryHistoryDto (e.getId(), MemberConverter.toDto(e.getMember_id()), e.getStart_date(), e.getEnd_date());
     }
 
     @Override
     public SecretaryHistory toEntity(SecretaryHistoryDto t) {
-       return new SecretaryHistory(t.getId(), t.getMembed_id(), t.getDepartment_id(), t.getStart_date(), t.getEnd_date());
+        System.out.println("NEED");
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+   
 }

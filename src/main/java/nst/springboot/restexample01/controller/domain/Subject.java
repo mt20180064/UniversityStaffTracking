@@ -38,6 +38,7 @@ public class Subject implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department;
 
     public Subject() {

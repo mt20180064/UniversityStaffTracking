@@ -24,23 +24,28 @@ public class MemberDto implements Serializable{
     private AcademicTitle academic_title;
     private EducationTitle education_title;
     private ScientificField scientific_field;
-    private DepartmentDto departmentDto;
+   // private DepartmentDto departmentDto;
     private List<AcademicTitleHistory> academicTitleHistories;
     private LocalDate title_start;
+    private Long departmentId;
+    private String departmentName;
     public MemberDto() {
     }
 
-    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, DepartmentDto departmentDto, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start) {
+    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start, Long departmentId, String departmentName) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.academic_title = academic_title;
         this.education_title = education_title;
         this.scientific_field = scientific_field;
-        this.departmentDto = departmentDto;
         this.academicTitleHistories = academicTitleHistories;
         this.title_start = title_start;
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
     }
+
+   
 
    
 
@@ -50,13 +55,7 @@ public class MemberDto implements Serializable{
 
   
 
-    public DepartmentDto getDepartmentDto() {
-        return departmentDto;
-    }
-
-    public void setDepartmentDto(DepartmentDto departmentDto) {
-        this.departmentDto = departmentDto;
-    }
+   
 
     
 
@@ -122,6 +121,22 @@ public class MemberDto implements Serializable{
 
     public void setTitle_start(LocalDate title_start) {
         this.title_start = title_start;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     

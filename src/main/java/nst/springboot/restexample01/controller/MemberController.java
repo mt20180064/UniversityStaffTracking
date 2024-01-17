@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Optional;
 import nst.springboot.restexample01.controller.domain.AcademicTitle;
 import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
+import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.service.AcademicTitleHistoryService;
 import nst.springboot.restexample01.controller.service.AcademicTitleService;
 import nst.springboot.restexample01.controller.service.MemberService;
 import nst.springboot.restexample01.converter.impl.AcademicTitleHistoryConverter;
+import nst.springboot.restexample01.converter.impl.DepartmentConverter;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.AcademicTitleHistoryDto;
+import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.dto.MemberDto;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.http.HttpStatus;
@@ -47,26 +50,28 @@ public class MemberController {
     private final AcademicTitleHistoryService academicTitleHistoryService;
     private final AcademicTitleHistoryConverter academicTitleHistoryConverter;
     private final AcademicTitleService academicTitleService;
+    private final DepartmentConverter departmentConverter;
     
     
-    public MemberController(nst.springboot.restexample01.controller.service.MemberService memberService, AcademicTitleHistoryService academicTitleHistoryService, MemberConverter memberConverter, AcademicTitleHistoryConverter academicTitleHistoryConverter, nst.springboot.restexample01.controller.service.AcademicTitleService academicTitleService) {
+    public MemberController(nst.springboot.restexample01.controller.service.MemberService memberService, AcademicTitleHistoryService academicTitleHistoryService, MemberConverter memberConverter, AcademicTitleHistoryConverter academicTitleHistoryConverter, nst.springboot.restexample01.controller.service.AcademicTitleService academicTitleService, nst.springboot.restexample01.converter.impl.DepartmentConverter departmentConverter) {
         this.memberService = memberService;
         this.academicTitleHistoryService = academicTitleHistoryService;
         this.memberConverter=memberConverter;
         this.academicTitleHistoryConverter=academicTitleHistoryConverter;
         this.academicTitleService = academicTitleService;
+        this.departmentConverter = departmentConverter;
     }
    private final MemberService memberService;
    
    
    
-   @GetMapping("/all")
+   @GetMapping
     public ResponseEntity<List<MemberDto>> getAll(){
        List<MemberDto> members = memberService.getAll();
         return new ResponseEntity<>(members, HttpStatus.OK); 
     }
     
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<MemberDto> save (@Valid @RequestBody MemberDto memberDto) throws Exception{
         MemberDto m = memberService.save(memberDto);
         return new ResponseEntity<>(m,HttpStatus.CREATED);
@@ -74,19 +79,19 @@ public class MemberController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-     
-     
         memberService.delete(id);
         return new ResponseEntity<>("Member removed!", HttpStatus.OK);
 
     }
     
-    @GetMapping("/findmember")
-    public ResponseEntity<MemberDto> findById (@RequestParam Long id) throws Exception{
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberDto> findById (@PathVariable Long id) throws Exception{
         MemberDto m = memberService.findById(id);
-        
+        Member mem = memberConverter.toEntity(m);
+        Department d = mem.getDepartment();
+        m.setDepartmentId(d.getId());
+        m.setDepartmentName(d.getName());
             return new ResponseEntity<>(m, HttpStatus.FOUND);
-      
     }
     
     @PutMapping("/updateTitle")

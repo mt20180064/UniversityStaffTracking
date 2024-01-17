@@ -4,8 +4,12 @@
  */
 package nst.springboot.restexample01.converter.impl;
 
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.converter.DtoEntityConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.dto.MemberDto;
@@ -18,6 +22,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
+
+    public MemberConverter(nst.springboot.restexample01.controller.service.DepartmentService DepartmentService) {
+        this.DepartmentService = DepartmentService;
+    }
+    private final DepartmentService DepartmentService;
     @Autowired
     private DepartmentConverter departmentConverter;
     @Override
@@ -26,18 +35,17 @@ public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
         return new MemberDto(
                 e.getId(), 
                 e.getFirstname(),e.getLastname(), e.getAcademic_title(),e.getEducation_title(), e.getScientific_field(), 
-                (d!=null ? departmentConverter.toDto(d) : null), e.getAcademicTitleHistories(), e.getTitle_start()
-        );
+                 e.getAcademicTitleHistories(), e.getTitle_start(),e.getDepartment().getId(), e.getDepartment().getName());
     }
 
     @Override
     public Member toEntity(MemberDto t) {
-        DepartmentDto d = t.getDepartmentDto();
-        return new Member(
-                t.getId(), t.getFirstname(),t.getLastname(),t.getAcademic_title(),
-                t.getEducation_title(),
-                t.getScientific_field(),
-        (d!=null ? departmentConverter.toEntity(d) : null), t.getAcademicTitleHistories(), t.getTitle_start());
+        try {
+            DepartmentDto department =  DepartmentService.findById(t.getDepartmentId());
+            return new Member (t.getId(), t.getFirstname(), t.getLastname(), t.getAcademic_title(), t.getEducation_title(), t.getScientific_field(), departmentConverter.toEntity(department), t.getAcademicTitleHistories(), LocalDate.MIN);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }return null;
     }
     
 }
