@@ -6,7 +6,6 @@ create table tbl_member(
         education_title_id bigint unsigned,
         scientific_field_id bigint unsigned,
         department_id bigint unsigned,
-        title_start datetime not null,
 	primary key (id),
         constraint department_fk2 FOREIGN KEY (department_id) REFERENCES tbl_department(id),
 constraint academic_title_fk FOREIGN KEY (academic_title_id) REFERENCES tbl_academic_title(id) ,

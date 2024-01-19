@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -94,7 +95,7 @@ public class MemberController {
             return new ResponseEntity<>(m, HttpStatus.FOUND);
     }
     
-    @PutMapping("/updateTitle")
+ /*   @PutMapping("/updateTitle")
   public ResponseEntity <MemberDto> updateTitle (@RequestParam Long id, @RequestParam Long at) throws Exception{
      MemberDto m = memberService.findById(id);
      AcademicTitle old = m.getAcademic_title();
@@ -113,7 +114,52 @@ public class MemberController {
      MemberDto me = memberService.save(m);
      AcademicTitleHistoryDto d = academicTitleHistoryService.save(ath);
      return new ResponseEntity<>(me, HttpStatus.OK);
-  }
+  }*/
+    
+@PutMapping("/{id}")
+public ResponseEntity<MemberDto> updateMember(
+    @RequestParam Long memberId,
+    @RequestBody MemberDto memberDto,
+    @RequestParam(required = false) Boolean updateAcademicTitleHistory) throws Exception {
+    
+    MemberDto memberToUpdate = memberService.findById(memberId);
+    
+    if (memberDto.getFirstname()!=null && !memberDto.getFirstname().equals("string")){
+        memberToUpdate.setFirstname(memberDto.getFirstname());
+    }
+ 
+     if (memberDto.getLastname()!=null && !memberDto.getLastname().equals("string")){
+        memberToUpdate.setLastname(memberDto.getLastname());
+    }
+   
+     if (memberDto.getAcademic_title().getId()!=null && memberDto.getAcademic_title().getId()!=0){
+        memberToUpdate.setAcademic_title(memberDto.getAcademic_title());
+    }
+
+ 
+    if (memberDto.getEducation_title().getId()!=null && memberDto.getEducation_title().getId()!=0){
+       memberToUpdate.setEducation_title(memberDto.getEducation_title());
+    }
+   
+    if (memberDto.getScientific_field().getId()!=null && memberDto.getScientific_field().getId()!=0){
+        memberToUpdate.setScientific_field(memberDto.getScientific_field());
+    }
+    
+    
+    if (memberDto.getDepartmentId()!=null && memberDto.getDepartmentId()!=0){
+       memberToUpdate.setDepartmentId(memberDto.getDepartmentId()); 
+    }
+      memberToUpdate.setAcademicTitleHistories(memberDto.getAcademicTitleHistories());
+   
+        if (Boolean.TRUE.equals(updateAcademicTitleHistory)) {
+            // Logic to update the academic title history
+            // ...
+       // }
+    }
+
+    MemberDto updatedMember = memberService.save(memberToUpdate);
+    return new ResponseEntity<>(updatedMember, HttpStatus.OK);
+}
    
   
 }

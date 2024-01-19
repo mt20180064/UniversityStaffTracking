@@ -35,14 +35,14 @@ public class MemberConverter implements DtoEntityConverter<MemberDto, Member> {
         return new MemberDto(
                 e.getId(), 
                 e.getFirstname(),e.getLastname(), e.getAcademic_title(),e.getEducation_title(), e.getScientific_field(), 
-                 e.getAcademicTitleHistories(), e.getTitle_start(),e.getDepartment().getId(), e.getDepartment().getName());
+                 e.getAcademicTitleHistories(), e.getDepartment().getId(), e.getDepartment().getName());
     }
 
     @Override
     public Member toEntity(MemberDto t) {
         try {
             DepartmentDto department =  DepartmentService.findById(t.getDepartmentId());
-            return new Member (t.getId(), t.getFirstname(), t.getLastname(), t.getAcademic_title(), t.getEducation_title(), t.getScientific_field(), departmentConverter.toEntity(department), t.getAcademicTitleHistories(), LocalDate.MIN);
+            return new Member (t.getId(), t.getFirstname(), t.getLastname(), t.getAcademic_title(), t.getEducation_title(), t.getScientific_field(), departmentConverter.toEntity(department), t.getAcademicTitleHistories());
         } catch (Exception ex) {
             ex.printStackTrace();
         }return null;

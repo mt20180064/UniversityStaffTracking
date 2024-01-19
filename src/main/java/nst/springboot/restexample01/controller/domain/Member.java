@@ -57,8 +57,7 @@ public class Member {
     @JsonIgnore
     private List<AcademicTitleHistory> academicTitleHistories;
     
-    @Column(name="title_start")
-    private LocalDate title_start;
+    
     
     
     public Member() {
@@ -97,7 +96,7 @@ public class Member {
 
     
 
-    public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start) {
+    public Member(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, Department department, List<AcademicTitleHistory> academicTitleHistories) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -106,7 +105,7 @@ public class Member {
         this.scientific_field = scientific_field;
         this.department = department;
         this.academicTitleHistories = academicTitleHistories;
-        this.title_start = title_start;
+
     }
 
    
@@ -163,13 +162,7 @@ public class Member {
         this.id = id;
     }
 
-    public LocalDate getTitle_start() {
-        return title_start;
-    }
-
-    public void setTitle_start(LocalDate title_start) {
-        this.title_start = title_start;
-    }
+  
     
     
     

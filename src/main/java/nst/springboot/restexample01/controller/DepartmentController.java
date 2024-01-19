@@ -213,4 +213,14 @@ public class DepartmentController {
         return new ResponseEntity<>(myErrorDetails, HttpStatus.BAD_REQUEST);
 
     }
+    @GetMapping("/{id}/managerHistory")
+    public List<ManagerHistory> managerHistories (@PathVariable Long id) throws Exception{
+        DepartmentDto d = departmentService.findById(id);
+        return d.getManagerHistories();
+    }
+    @GetMapping("/{id}/secretaryHistory")
+    public List<SecretaryHistory> secretaryHistories (@PathVariable Long id) throws Exception{
+        DepartmentDto d = departmentService.findById(id);
+        return d.getSecretaryHistories();
+    }
 }

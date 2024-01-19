@@ -26,13 +26,13 @@ public class MemberDto implements Serializable{
     private ScientificField scientific_field;
    // private DepartmentDto departmentDto;
     private List<AcademicTitleHistory> academicTitleHistories;
-    private LocalDate title_start;
+    
     private Long departmentId;
     private String departmentName;
     public MemberDto() {
     }
 
-    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, List<AcademicTitleHistory> academicTitleHistories, LocalDate title_start, Long departmentId, String departmentName) {
+    public MemberDto(Long id, String firstname, String lastname, AcademicTitle academic_title, EducationTitle education_title, ScientificField scientific_field, List<AcademicTitleHistory> academicTitleHistories,  Long departmentId, String departmentName) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -40,7 +40,7 @@ public class MemberDto implements Serializable{
         this.education_title = education_title;
         this.scientific_field = scientific_field;
         this.academicTitleHistories = academicTitleHistories;
-        this.title_start = title_start;
+        
         this.departmentId = departmentId;
         this.departmentName = departmentName;
     }
@@ -113,14 +113,6 @@ public class MemberDto implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDate getTitle_start() {
-        return title_start;
-    }
-
-    public void setTitle_start(LocalDate title_start) {
-        this.title_start = title_start;
     }
 
     public Long getDepartmentId() {
