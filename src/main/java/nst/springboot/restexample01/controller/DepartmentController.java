@@ -143,7 +143,7 @@ public class DepartmentController {
     @PutMapping("/manager/{id}")
     public ResponseEntity<DepartmentDto> updateDepartmentManager(@PathVariable Long id, 
             @RequestParam Long idmanager,
-            @RequestParam(required = true) Boolean updateManagerHistory,@RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
+            @RequestParam(required = true) Boolean updateManagerHistory) throws Exception{
         
       //trazi se department sa kojim radimo
       Department m = departmentService.findById(id);
@@ -177,7 +177,7 @@ public class DepartmentController {
      @PutMapping("/secretary/{id}")
     public ResponseEntity<DepartmentDto> updateDepartmentSecretary(@PathVariable Long id,
             @RequestParam Long idsecretary,
-            @RequestParam(required = true) Boolean updateManagerHistory,@RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
+            @RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
         
       //trazi se department sa kojim radimo
       Department m = departmentService.findById(id);
@@ -203,6 +203,7 @@ public class DepartmentController {
         
        
      DepartmentDto updated = departmentService.update(departmentConverter.toDto(m));
+         
      return new ResponseEntity<>(updated, HttpStatus.OK);
     }
     
