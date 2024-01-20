@@ -15,7 +15,7 @@ import nst.springboot.restexample01.controller.domain.Member;
  */
 public class ManagerHistoryDto implements Serializable{
      private Long id;
-    private MemberDto member_id;
+    private Long member_id;
     private LocalDate start_date;
     private LocalDate end_date;
 
@@ -40,12 +40,14 @@ public class ManagerHistoryDto implements Serializable{
         this.id = id;
     }
 
-    public ManagerHistoryDto(Long id, MemberDto member_id, LocalDate start_date, LocalDate end_date) {
+    public ManagerHistoryDto(Long id, Long member_id, LocalDate start_date, LocalDate end_date) {
         this.id = id;
         this.member_id = member_id;
         this.start_date = start_date;
         this.end_date = end_date;
     }
+
+  
 
   
 
@@ -59,13 +61,7 @@ public class ManagerHistoryDto implements Serializable{
         this.start_date = start_date;
     }
 
-    public MemberDto getMember_id() {
-        return member_id;
-    }
-
-    public void setMember_id(MemberDto member_id) {
-        this.member_id = member_id;
-    }
+   
     
     
     

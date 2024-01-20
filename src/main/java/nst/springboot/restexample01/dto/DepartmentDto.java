@@ -25,17 +25,22 @@ public class DepartmentDto implements Serializable{
     private String name;
     private Long manager;
     private Long secretary;
-    
+    private List<SecretaryHistory> secretaryHistorys;
+    private List<ManagerHistory> managerHistorys;
  
     public DepartmentDto() {
     }
 
-    public DepartmentDto(Long id, String name, Long manager, Long secretary) {
+    public DepartmentDto(Long id, String name, Long manager, Long secretary, List<SecretaryHistory> secretaryHistorys, List<ManagerHistory> managerHistorys) {
         this.id = id;
         this.name = name;
         this.manager = manager;
         this.secretary = secretary;
+        this.secretaryHistorys = secretaryHistorys;
+        this.managerHistorys = managerHistorys;
     }
+
+
 
    
 
@@ -69,6 +74,22 @@ public class DepartmentDto implements Serializable{
 
     public void setSecretary(Long secretary) {
         this.secretary = secretary;
+    }
+
+    public List<SecretaryHistory> getSecretaryHistorys() {
+        return secretaryHistorys;
+    }
+
+    public void setSecretaryHistorys(List<SecretaryHistory> secretaryHistorys) {
+        this.secretaryHistorys = secretaryHistorys;
+    }
+
+    public List<ManagerHistory> getManagerHistorys() {
+        return managerHistorys;
+    }
+
+    public void setManagerHistorys(List<ManagerHistory> managerHistorys) {
+        this.managerHistorys = managerHistorys;
     }
 
  

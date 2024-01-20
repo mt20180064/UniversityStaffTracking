@@ -22,13 +22,14 @@ public class SecretaryHistoryConverter implements DtoEntityConverter<SecretaryHi
 private final MemberConverter MemberConverter;
     @Override
     public SecretaryHistoryDto toDto(SecretaryHistory e) {
-        return new SecretaryHistoryDto (e.getId(), MemberConverter.toDto(e.getMember_id()), e.getStart_date(), e.getEnd_date());
+        return new SecretaryHistoryDto (e.getId(), e.getMember_id().getId(), e.getStart_date(), e.getEnd_date());
     }
 
     @Override
     public SecretaryHistory toEntity(SecretaryHistoryDto t) {
-        System.out.println("NEED");
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       SecretaryHistory s = new SecretaryHistory();
+       s.setId(t.getId());
+       return s;
     }
 
    

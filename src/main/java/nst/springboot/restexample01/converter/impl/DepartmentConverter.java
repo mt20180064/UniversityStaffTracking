@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.converter.impl;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nst.springboot.restexample01.controller.domain.Department;
@@ -37,6 +38,14 @@ if (department.getManager() != null) {
         if (department.getSecretary() != null) {
             departmentDto.setSecretary(department.getSecretary().getId());
         }
+        
+        if (department.getManagerHistories()!=null){
+            departmentDto.setManagerHistorys(department.getManagerHistories());
+        } else departmentDto.setManagerHistorys(new ArrayList<>());
+        
+        if (department.getSecretaryHistories()!=null){
+            departmentDto.setSecretaryHistorys(department.getSecretaryHistories());
+        } else departmentDto.setSecretaryHistorys(new ArrayList<>());
         return departmentDto;
     }
 

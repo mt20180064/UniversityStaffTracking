@@ -6,6 +6,7 @@ package nst.springboot.restexample01.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.ManagerHistory;
@@ -22,6 +23,7 @@ import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.dto.ManagerHistoryDto;
 import nst.springboot.restexample01.dto.MemberDto;
+import nst.springboot.restexample01.dto.SecretaryHistoryDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
 import org.springframework.data.domain.PageRequest;
@@ -271,5 +273,37 @@ public class DepartmentController {
        // Department department = departmentConverter.toEntity(d);
         System.out.println("ono sto treba:"+d.getSecretaryHistories());
         return d.getSecretaryHistories();
+    }
+    
+    @PutMapping("/{id}/addSecretaryHistory")
+    public ResponseEntity<DepartmentDto> addSecretaryHistory (@PathVariable Long id,
+            @RequestBody SecretaryHistory sh) throws Exception{
+        if (sh.getEnd_date()==null || sh.getStart_date()==null){
+            throw new Exception("Dates can not be null");
+        }
+        Department d = departmentService.findById(id);
+        if (d.getSecretaryHistories()==null){
+            d.setSecretaryHistories(new ArrayList<>());
+        }
+        sh.setDepartment_id(d);
+        d.getSecretaryHistories().add(sh);
+        DepartmentDto dupdated = departmentService.update(departmentConverter.toDto(d));
+        return new ResponseEntity<>(dupdated, HttpStatus.OK);
+    }
+    
+    @PutMapping("/{id}/addManagerHistory")
+    public ResponseEntity<DepartmentDto> addManagerHistory (@PathVariable Long id,
+            @RequestBody ManagerHistory sh) throws Exception{
+        if (sh.getEnd_date()==null || sh.getStart_date()==null){
+            throw new Exception("Dates can not be null");
+        }
+        Department d = departmentService.findById(id);
+        if (d.getManagerHistories()==null){
+            d.setManagerHistories(new ArrayList<>());
+        }
+        sh.setDepartment_id(d);
+        d.getManagerHistories().add(sh);
+        DepartmentDto dupdated = departmentService.update(departmentConverter.toDto(d));
+        return new ResponseEntity<>(dupdated, HttpStatus.OK);
     }
 }

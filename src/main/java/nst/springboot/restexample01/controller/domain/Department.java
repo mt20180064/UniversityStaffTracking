@@ -51,10 +51,10 @@ public class Department {
      @JsonIgnore
      private Member secretary;
      @OneToMany(mappedBy = "department_id", cascade = CascadeType.ALL)
-     @JsonIgnore
+     //@JsonIgnore
      private List<ManagerHistory> managerHistories;
      @OneToMany(mappedBy = "department_id", cascade = CascadeType.ALL)
-     @JsonIgnore
+     //@JsonIgnore
      private List<SecretaryHistory> secretaryHistories;
      
      
