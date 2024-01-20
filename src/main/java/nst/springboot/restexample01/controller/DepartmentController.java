@@ -12,18 +12,14 @@ import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.ManagerHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.SecretaryHistory;
-import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.controller.service.ManagerHistoryService;
 import nst.springboot.restexample01.controller.service.MemberService;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
-import nst.springboot.restexample01.controller.service.SubjectService;
 import nst.springboot.restexample01.converter.impl.DepartmentConverter;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
-import nst.springboot.restexample01.dto.ManagerHistoryDto;
 import nst.springboot.restexample01.dto.MemberDto;
-import nst.springboot.restexample01.dto.SecretaryHistoryDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
 import org.springframework.data.domain.PageRequest;
@@ -31,8 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,8 +50,7 @@ public class DepartmentController {
     private final MemberService memberService;
     private final MemberConverter memberConverter;
     private final DepartmentConverter departmentConverter;
-    private final ManagerHistoryService managerHistoryService;
-    private final SecretaryHistoryService secretaryHistoryService;
+    
 
     public DepartmentController(DepartmentService departmentService, nst.springboot.restexample01.controller.service.MemberService memberService, MemberConverter memberConverter, DepartmentConverter departmentConverter, ManagerHistoryService managerHistoryService, nst.springboot.restexample01.controller.service.SecretaryHistoryService secretaryHistoryService) {
         this.departmentService = departmentService;
@@ -67,8 +60,7 @@ public class DepartmentController {
         this.memberService = memberService;
         this.memberConverter=memberConverter;
         this.departmentConverter=departmentConverter;
-        this.managerHistoryService= managerHistoryService;
-        this.secretaryHistoryService = secretaryHistoryService;
+        
     }
 
     //dodaj novi department
@@ -119,38 +111,23 @@ public class DepartmentController {
         throw new Exception("Nije implementirana.");
     }
 
-    //azuriraj
-    //obrisi
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
-       
-        
-        
-        
-        
         departmentService.delete(id);
         return new ResponseEntity<>("Department removed!", HttpStatus.OK);
 
     }
     
     
-    
-    @PutMapping("/manager/{id}")
+    @PutMapping("/{id}/update-manager")
     public ResponseEntity<DepartmentDto> updateDepartmentManager(@PathVariable Long id, 
             @RequestParam Long idmanager,
             @RequestParam(required = true) Boolean updateManagerHistory) throws Exception{
         
-      //trazi se department sa kojim radimo
+     
       Department m = departmentService.findById(id);
       
-     
         if (Boolean.TRUE.equals(updateManagerHistory) && m.getManagerHistories()!=null){
          for (ManagerHistory managerHistory1 : m.getManagerHistories()) {
              if (managerHistory1.getEnd_date()==null){
@@ -170,21 +147,19 @@ public class DepartmentController {
         ManagerHistory newMh = new ManagerHistory(memberConverter.toEntity(ne), m, LocalDate.now(), null);
         m.getManagerHistories().add(newMh);
         
-       
-        
+     
      DepartmentDto updated = departmentService.update(departmentConverter.toDto(m));
      return new ResponseEntity<>(updated, HttpStatus.OK);
     }
     
-     @PutMapping("/secretary/{id}")
+     @PutMapping("/{id}/update-secretary")
     public ResponseEntity<DepartmentDto> updateDepartmentSecretary(@PathVariable Long id,
             @RequestParam Long idsecretary,
             @RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
         
       //trazi se department sa kojim radimo
       Department m = departmentService.findById(id);
-      
-    
+     
           if (Boolean.TRUE.equals(updateSecretaryHistory) && m.getSecretaryHistories()!=null){
          for (SecretaryHistory sh : m.getSecretaryHistories()) {
              if (sh.getEnd_date()==null){
@@ -192,8 +167,7 @@ public class DepartmentController {
              }
          }
      }
-        
-      
+       
         MemberDto sec= memberService.findById(idsecretary);
        if (!m.getMembers().contains(memberConverter.toEntity(sec))){
          throw new Exception ("this member does not belong to the wanted department!");
@@ -209,34 +183,10 @@ public class DepartmentController {
      return new ResponseEntity<>(updated, HttpStatus.OK);
     }
     
-    /*
-    @PutMapping("/updateSecretary{id}")
-    public ResponseEntity<DepartmentDto> updateSecretary(@PathVariable Long id, @RequestParam Long idsec) throws Exception{
-        DepartmentDto dep = departmentService.findById(id);
-       Member old = dep.getSecretary_id();
-        MemberDto sec= memberService.findById(idsec);
-     if (!dep.getMembers().contains(memberConverter.toEntity(sec))){
-       throw new Exception("Requested member does not belong to that department");
-     }
-         dep.setSecretary_id(memberConverter.toEntity(sec));
-         DepartmentDto newdep = departmentService.update(dep);
-          LocalDate ld;
-        int duzinaliste = dep.getSecretaryHistories().size();
-        if (duzinaliste>0){
-            ld = dep.getSecretaryHistories().get(duzinaliste-1).getEnd_date();
-        } else{
-            ld = LocalDate.now();
-        }
-         SecretaryHistory sh = new SecretaryHistory(300l, old,departmentConverter.toEntity(dep), ld, LocalDate.now());
-         if (sh.getMember_id()!=null){
-         SecretaryHistory s = secretaryHistoryService.save(sh);}
-         return new ResponseEntity<>(newdep, HttpStatus.OK);
-     }*/
     
-    @GetMapping("/members")
-    public List<Member> getDepartmentMembers(@RequestParam Long depid) throws Exception{
-        Department dep= departmentService.findById(depid);
-       
+    @GetMapping("/{id}/members")
+    public List<Member> getDepartmentMembers(@PathVariable Long id) throws Exception{
+        Department dep= departmentService.findById(id);
         return dep.getMembers();
     }
     
@@ -275,7 +225,7 @@ public class DepartmentController {
         return d.getSecretaryHistories();
     }
     
-    @PutMapping("/{id}/addSecretaryHistory")
+    @PutMapping("/{id}/add-secretary-history")
     public ResponseEntity<DepartmentDto> addSecretaryHistory (@PathVariable Long id,
             @RequestBody SecretaryHistory sh) throws Exception{
         if (sh.getEnd_date()==null || sh.getStart_date()==null){
@@ -291,7 +241,7 @@ public class DepartmentController {
         return new ResponseEntity<>(dupdated, HttpStatus.OK);
     }
     
-    @PutMapping("/{id}/addManagerHistory")
+    @PutMapping("/{id}/add-manager-history")
     public ResponseEntity<DepartmentDto> addManagerHistory (@PathVariable Long id,
             @RequestBody ManagerHistory sh) throws Exception{
         if (sh.getEnd_date()==null || sh.getStart_date()==null){
