@@ -76,10 +76,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     }
 
-    @Override
-    public void update(SubjectDto subjectDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+   
 
     @Override
     public SubjectDto findById(Long id) throws Exception {
@@ -91,6 +88,20 @@ public class SubjectServiceImpl implements SubjectService {
         } else {
             throw new Exception("Subject does not exist!");
         }
+    }
+
+    @Override
+    @Transactional
+    public SubjectDto update(SubjectDto subjectDto) throws Exception {
+       Subject subject = subjectConverter.toEntity(subjectDto);
+
+        Optional<Department> department = departmentRepository.findById(subjectDto.getDepartmentId());
+        if (department.isPresent()){
+        subject.setDepartment(department.get());
+        } else throw new Exception("That department does not exist");
+        Subject createdSubject = subjectRepository.save(subject);
+
+        return subjectConverter.toDto(createdSubject);
     }
 
 }

@@ -6,6 +6,7 @@ package nst.springboot.restexample01.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import nst.springboot.restexample01.controller.domain.Subject;
 import nst.springboot.restexample01.controller.service.SubjectService;
 import nst.springboot.restexample01.dto.SubjectDto;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -78,6 +80,21 @@ public class SubjectController {
         subjectService.delete(id);
         return new ResponseEntity<>("Subject removed!", HttpStatus.OK);
 
+    }
+    
+    @PutMapping("/{id}")
+    public SubjectDto update(@PathVariable Long id, @RequestBody SubjectDto subjectDto) throws Exception{
+        SubjectDto s = subjectService.findById(id);
+        if (subjectDto.getName()!=null && !subjectDto.getName().equals("string")){
+            s.setName(subjectDto.getName());
+        }
+        if (subjectDto.getEsbp()!=0 ){
+            s.setEsbp(subjectDto.getEsbp());
+        }
+        if (subjectDto.getDepartmentId()!=null && subjectDto.getDepartmentId()!=0){
+            s.setDepartmentId(subjectDto.getDepartmentId());
+        }
+       return subjectService.update(s);
     }
     
     
