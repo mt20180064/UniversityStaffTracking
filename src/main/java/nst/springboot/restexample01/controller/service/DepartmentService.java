@@ -5,6 +5,7 @@
 package nst.springboot.restexample01.controller.service;
 
 import java.util.List;
+import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import org.springframework.data.domain.Pageable;
 /**
@@ -17,5 +18,5 @@ public interface DepartmentService {
     List<DepartmentDto> getAll(Pageable pageable);
     List<DepartmentDto> getAll();
     void delete(Long id) throws Exception;
-    DepartmentDto findById(Long id) throws Exception;
+    Department findById(Long id) throws Exception;
 }

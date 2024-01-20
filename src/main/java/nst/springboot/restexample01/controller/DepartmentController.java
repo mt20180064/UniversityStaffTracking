@@ -104,7 +104,7 @@ public class DepartmentController {
     //pronadji na osnovu ID/a
     //localhost:8080/department/1
     @GetMapping("/{id}")
-    public DepartmentDto findById(@PathVariable("id") Long id) throws Exception {
+    public Department findById(@PathVariable("id") Long id) throws Exception {
         System.out.println("Controller: " + id);
         return departmentService.findById(id);
     }
@@ -138,31 +138,37 @@ public class DepartmentController {
 
     }
 
-   /* @PutMapping("/updateManager{id}")
-    public ResponseEntity<DepartmentDto> updateManager(@PathVariable Long id, @RequestParam Long idman) throws Exception{
-       DepartmentDto m = departmentService.findById(id);
-       Member old = m.getManager_id();
-     MemberDto ne= memberService.findById(idman);
-     if (!m.getMembers().contains(memberConverter.toEntity(ne))){
+    @PutMapping("/updateManager{id}")
+    public ResponseEntity<DepartmentDto> updateManager(@PathVariable Long id, @RequestParam Long idman,
+           // @RequestBody (required=false) ManagerHistory managerHistory,
+            @RequestParam(required = true) Boolean updateManagerHistory) throws Exception{
+      //trazi se department sa kojim radimo
+      Department m = departmentService.findById(id);
+      
+        if (Boolean.TRUE.equals(updateManagerHistory) && m.getManagerHistories()!=null){
+         for (ManagerHistory managerHistory1 : m.getManagerHistories()) {
+             if (managerHistory1.getEnd_date()==null){
+                 managerHistory1.setEnd_date(LocalDate.now());
+             }
+         }
+         
+     }
+       //ovaj deo se svakako desava, uneseni member postaje novi menadzer
+       MemberDto ne= memberService.findById(idman);
+       if (!m.getMembers().contains(memberConverter.toEntity(ne))){
          throw new Exception ("this member does not belong to the wanted department!");
      }
         System.out.println(ne.getFirstname());
-     m.setManager_id(memberConverter.toEntity(ne));
-        System.out.println(m.getManager_id().getFirstname());
-        LocalDate ld;
-        int duzinaliste = m.getManagerHistories().size();
-        if (duzinaliste>0){
-            ld = m.getManagerHistories().get(duzinaliste-1).getEnd_date();
-        } else{
-            ld = LocalDate.now();
-        }
-     DepartmentDto med = departmentService.update(m);
-     ManagerHistory mhd = new ManagerHistory(200l, old, departmentConverter.toEntity(m), ld, LocalDate.now());
-     if (mhd.getMember_id()!=null){
-     ManagerHistory mh = managerHistoryService.save(mhd);}
-        System.out.println("sacuvano i u istoriju");
-     return new ResponseEntity<>(med, HttpStatus.OK);
+        m.setManager(memberConverter.toEntity(ne));
+        //taj novi se svakako dodaje u istoriju 
+        ManagerHistory newMh = new ManagerHistory(memberConverter.toEntity(ne), m, LocalDate.now(), null);
+        m.getManagerHistories().add(newMh);
+        
+       
+     DepartmentDto updated = departmentService.update(departmentConverter.toDto(m));
+     return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+    /*
     @PutMapping("/updateSecretary{id}")
     public ResponseEntity<DepartmentDto> updateSecretary(@PathVariable Long id, @RequestParam Long idsec) throws Exception{
         DepartmentDto dep = departmentService.findById(id);
@@ -188,9 +194,9 @@ public class DepartmentController {
     
     @GetMapping("/members")
     public List<Member> getDepartmentMembers(@RequestParam Long depid) throws Exception{
-        DepartmentDto dep= departmentService.findById(depid);
-        Department department= departmentConverter.toEntity(dep);
-        return department.getMembers();
+        Department dep= departmentService.findById(depid);
+       
+        return dep.getMembers();
     }
     
     /*
@@ -216,14 +222,15 @@ public class DepartmentController {
     }
     @GetMapping("/{id}/managerHistory")
     public List<ManagerHistory> managerHistories (@PathVariable Long id) throws Exception{
-        DepartmentDto d = departmentService.findById(id);
-        Department department = departmentConverter.toEntity(d);
-        return department.getManagerHistories();
+        Department d = departmentService.findById(id);
+       // Department department = departmentConverter.toEntity(d);
+        return d.getManagerHistories();
     }
     @GetMapping("/{id}/secretaryHistory")
     public List<SecretaryHistory> secretaryHistories (@PathVariable Long id) throws Exception{
-        DepartmentDto d = departmentService.findById(id);
-        Department department = departmentConverter.toEntity(d);
-        return department.getSecretaryHistories();
+        Department d = departmentService.findById(id);
+       // Department department = departmentConverter.toEntity(d);
+        System.out.println("ono sto treba:"+d.getSecretaryHistories());
+        return d.getSecretaryHistories();
     }
 }

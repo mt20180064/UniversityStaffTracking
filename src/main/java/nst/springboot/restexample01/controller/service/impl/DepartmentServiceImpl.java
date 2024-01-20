@@ -83,14 +83,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
    
     @Override
-    public DepartmentDto findById(Long id) throws Exception {
+    public Department findById(Long id) throws Exception {
         Optional<Department> dept = departmentRepository.findById(id);
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
-            System.out.println(department.getManagerHistories());
-            System.out.println(department.getSecretaryHistories());
-            return departmentConverter.toDto(department);
+           
+            return department;
             
         } else {
             throw new Exception("Department does not exist!");
@@ -112,13 +111,21 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public DepartmentDto update(DepartmentDto departmentDto) throws Exception {
-       
-            Department department = departmentConverter.toEntity(departmentDto);
-            department = departmentRepository.save(department);
-         
-            return departmentConverter.toDto(department);
+ @Override
+@Transactional
+public DepartmentDto update(DepartmentDto departmentDto) throws Exception {
+    if (departmentDto.getId() == null) {
+        throw new Exception("Department ID is required for an update.");
     }
+    Department existingDepartment = departmentRepository.findById(departmentDto.getId())
+                                  .orElseThrow(() -> new Exception("Department not found with ID: " + departmentDto.getId()));
+
+    if (departmentDto.getName()!=null && !departmentDto.getName().equals("string")){
+        existingDepartment.setName(departmentDto.getName());
+    }
+    
+    existingDepartment = departmentRepository.save(existingDepartment);
+
+    return departmentConverter.toDto(existingDepartment);
+}
 }

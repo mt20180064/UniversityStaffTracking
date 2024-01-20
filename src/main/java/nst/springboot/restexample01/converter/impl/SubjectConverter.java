@@ -44,13 +44,13 @@ public class SubjectConverter implements DtoEntityConverter<SubjectDto, Subject>
     @Override
     public Subject toEntity(SubjectDto dto) {
         try {
-            DepartmentDto d = departmentService.findById(dto.getDepartmentId());
-            System.out.println("d u subjectConverter:"+d.getId());
+            Department d = departmentService.findById(dto.getDepartmentId());
+           
             return new Subject(
                     dto.getId(),
                     dto.getName(),
                     dto.getEsbp(),
-                    (departmentConverter.toEntity(d))
+                    (d)
             );
         } catch (Exception ex) {
             ex.printStackTrace();

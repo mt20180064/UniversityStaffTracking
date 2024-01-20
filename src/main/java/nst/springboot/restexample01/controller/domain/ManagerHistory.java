@@ -50,6 +50,13 @@ public class ManagerHistory {
         this.start_date = start_date;
         this.end_date = end_date;
     }
+     public ManagerHistory( Member member_id, Department department_id, LocalDate start_date, LocalDate end_date) {
+        
+        this.member_id = member_id;
+        this.department_id = department_id;
+        this.start_date = start_date;
+        this.end_date = end_date;
+    }
 
     @Override
     public String toString() {
