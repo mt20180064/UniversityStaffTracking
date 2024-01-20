@@ -18,14 +18,24 @@ import org.springframework.stereotype.Component;
 public class DepartmentConverter implements DtoEntityConverter<DepartmentDto, Department>{
 
     @Override
-    public DepartmentDto toDto(Department entity) {
+    public DepartmentDto toDto(Department department) {
         
-        return new DepartmentDto(entity.getId(), entity.getName(),entity.getMembers(),entity.getSubjects(), entity.getManager(), entity.getSecretary(), entity.getManagerHistories(), entity.getSecretaryHistories());
+      DepartmentDto departmentDto = new DepartmentDto();
+
+        departmentDto.setId(department.getId());
+        departmentDto.setName(department.getName());
+
+        return departmentDto;
     }
 
     @Override
     public Department toEntity(DepartmentDto dto) {
-        return new Department(dto.getId(), dto.getName(), dto.getMembers(), dto.getSubjects(), dto.getManager_id(), dto.getSecretary_id(), dto.getManagerHistories(),dto.getSecretaryHistories());
+        
+        Department department = new Department();
+        
+        department.setName(dto.getName());
+
+        return department;
     }
     
 }

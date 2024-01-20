@@ -47,36 +47,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     @Transactional
     public DepartmentDto save(DepartmentDto departmentDto) throws Exception {
-        if (departmentDto.getId()!=null){
-            throw new Exception ("You can't specify ID. Database does that so leave it null");
-        }
-        List<Member> m=departmentDto.getMembers();
-        for (Member member : m) {
-            if (member.getId()!=null){
-                throw new Exception("leave memberID null. Database will initiate it");
-            }
-            
-        }
-        List<Subject> s = departmentDto.getSubjects();
-        for (Subject subject : s) {
-            if (subject.getId()!=null){
-                throw new Exception("leave subjectID null. Database will initiate it");
-            }
-            
-        }
-        if(departmentDto.getManager_id()!=null || departmentDto.getSecretary_id()!=null || departmentDto.getSecretaryHistories()!=null || departmentDto.getManagerHistories()!=null){
-            throw new Exception ("you can't specify manager and secretary this way. First make the department and then use method UPDATEMANAGER/UPDATESECRETARY");
-        }
-            //DTO - > Entity
-            //Department department = new Department(departmentDto.getId(), departmentDto.getName());
+      
+       
             Department department = departmentConverter.toEntity(departmentDto);
             department = departmentRepository.save(department);
-            for (Subject subject : s) {
-            subject.setDepartment(department);
-        }
-            for (Member member : m) {
-            member.setDepartment(department);
-        }
+          
             return departmentConverter.toDto(department);
         
         }

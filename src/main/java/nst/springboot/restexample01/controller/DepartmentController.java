@@ -138,7 +138,7 @@ public class DepartmentController {
 
     }
 
-    @PutMapping("/updateManager{id}")
+   /* @PutMapping("/updateManager{id}")
     public ResponseEntity<DepartmentDto> updateManager(@PathVariable Long id, @RequestParam Long idman) throws Exception{
        DepartmentDto m = departmentService.findById(id);
        Member old = m.getManager_id();
@@ -184,12 +184,13 @@ public class DepartmentController {
          if (sh.getMember_id()!=null){
          SecretaryHistory s = secretaryHistoryService.save(sh);}
          return new ResponseEntity<>(newdep, HttpStatus.OK);
-     }
+     }*/
     
     @GetMapping("/members")
     public List<Member> getDepartmentMembers(@RequestParam Long depid) throws Exception{
         DepartmentDto dep= departmentService.findById(depid);
-        return dep.getMembers();
+        Department department= departmentConverter.toEntity(dep);
+        return department.getMembers();
     }
     
     /*
@@ -216,11 +217,13 @@ public class DepartmentController {
     @GetMapping("/{id}/managerHistory")
     public List<ManagerHistory> managerHistories (@PathVariable Long id) throws Exception{
         DepartmentDto d = departmentService.findById(id);
-        return d.getManagerHistories();
+        Department department = departmentConverter.toEntity(d);
+        return department.getManagerHistories();
     }
     @GetMapping("/{id}/secretaryHistory")
     public List<SecretaryHistory> secretaryHistories (@PathVariable Long id) throws Exception{
         DepartmentDto d = departmentService.findById(id);
-        return d.getSecretaryHistories();
+        Department department = departmentConverter.toEntity(d);
+        return department.getSecretaryHistories();
     }
 }
