@@ -50,6 +50,14 @@ public class SecretaryHistory {
         this.start_date = start_date;
         this.end_date = end_date;
     }
+    
+    public SecretaryHistory( Member member_id, Department department_id, LocalDate start_date, LocalDate end_date) {
+   
+        this.member_id = member_id;
+        this.department_id = department_id;
+        this.start_date = start_date;
+        this.end_date = end_date;
+    }
 
     public LocalDate getEnd_date() {
         return end_date;

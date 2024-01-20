@@ -137,37 +137,75 @@ public class DepartmentController {
         return new ResponseEntity<>("Department removed!", HttpStatus.OK);
 
     }
-
-    @PutMapping("/updateManager{id}")
-    public ResponseEntity<DepartmentDto> updateManager(@PathVariable Long id, @RequestParam Long idman,
-           // @RequestBody (required=false) ManagerHistory managerHistory,
-            @RequestParam(required = true) Boolean updateManagerHistory) throws Exception{
+    
+    
+    
+    @PutMapping("/manager/{id}")
+    public ResponseEntity<DepartmentDto> updateDepartmentManager(@PathVariable Long id, 
+            @RequestParam Long idmanager,
+            @RequestParam(required = true) Boolean updateManagerHistory,@RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
+        
       //trazi se department sa kojim radimo
       Department m = departmentService.findById(id);
       
+     
         if (Boolean.TRUE.equals(updateManagerHistory) && m.getManagerHistories()!=null){
          for (ManagerHistory managerHistory1 : m.getManagerHistories()) {
              if (managerHistory1.getEnd_date()==null){
                  managerHistory1.setEnd_date(LocalDate.now());
              }
          }
-         
      }
+         
+        
        //ovaj deo se svakako desava, uneseni member postaje novi menadzer
-       MemberDto ne= memberService.findById(idman);
+       MemberDto ne= memberService.findById(idmanager);
        if (!m.getMembers().contains(memberConverter.toEntity(ne))){
          throw new Exception ("this member does not belong to the wanted department!");
      }
-        System.out.println(ne.getFirstname());
         m.setManager(memberConverter.toEntity(ne));
         //taj novi se svakako dodaje u istoriju 
         ManagerHistory newMh = new ManagerHistory(memberConverter.toEntity(ne), m, LocalDate.now(), null);
         m.getManagerHistories().add(newMh);
         
        
+        
      DepartmentDto updated = departmentService.update(departmentConverter.toDto(m));
      return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+    
+     @PutMapping("/secretary/{id}")
+    public ResponseEntity<DepartmentDto> updateDepartmentSecretary(@PathVariable Long id,
+            @RequestParam Long idsecretary,
+            @RequestParam(required = true) Boolean updateManagerHistory,@RequestParam (required=true) Boolean updateSecretaryHistory) throws Exception{
+        
+      //trazi se department sa kojim radimo
+      Department m = departmentService.findById(id);
+      
+    
+          if (Boolean.TRUE.equals(updateSecretaryHistory) && m.getSecretaryHistories()!=null){
+         for (SecretaryHistory sh : m.getSecretaryHistories()) {
+             if (sh.getEnd_date()==null){
+                 sh.setEnd_date(LocalDate.now());
+             }
+         }
+     }
+        
+      
+        MemberDto sec= memberService.findById(idsecretary);
+       if (!m.getMembers().contains(memberConverter.toEntity(sec))){
+         throw new Exception ("this member does not belong to the wanted department!");
+     }
+        m.setSecretary(memberConverter.toEntity(sec));
+        //taj novi se svakako dodaje u istoriju 
+        SecretaryHistory secHis = new SecretaryHistory(memberConverter.toEntity(sec), m, LocalDate.now(), null);
+        m.getSecretaryHistories().add(secHis);
+        
+       
+     DepartmentDto updated = departmentService.update(departmentConverter.toDto(m));
+     return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+    
     /*
     @PutMapping("/updateSecretary{id}")
     public ResponseEntity<DepartmentDto> updateSecretary(@PathVariable Long id, @RequestParam Long idsec) throws Exception{
