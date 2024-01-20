@@ -19,7 +19,7 @@ public interface MemberService {
     MemberDto save(MemberDto memberDto)throws Exception;
     List<MemberDto> getAll();
     void delete(Long id) throws Exception;
-    void update(MemberDto memberDto)throws Exception;
+    MemberDto update(MemberDto memberDto)throws Exception;
     MemberDto findById(Long id)throws Exception;
     public void updateAcademicTitleHistory(Member member, AcademicTitleHistoryDto academicTitleHistoryDto);
 }

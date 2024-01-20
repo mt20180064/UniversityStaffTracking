@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,12 @@ public class MemberController {
     
     @PostMapping
     public ResponseEntity<MemberDto> save (@Valid @RequestBody MemberDto memberDto) throws Exception{
+        //kada cuvam novog membera koji nema istoriju promene titule, problem je sto nemam na koju listu da dodam trenutnu
+        //titulu pa cu sada to da implementiram
+        if (memberDto.getAcademicTitleHistories()==null){
+            memberDto.setAcademicTitleHistories(new ArrayList<>());
+            System.out.println("uslo u petlju");
+        }
         MemberDto m = memberService.save(memberDto);
         return new ResponseEntity<>(m,HttpStatus.CREATED);
     }
@@ -120,9 +127,25 @@ public class MemberController {
 public ResponseEntity<MemberDto> updateMember(
     @RequestParam Long memberId,
     @RequestBody MemberDto memberDto,
-    @RequestParam(required = false) Boolean updateAcademicTitleHistory) throws Exception {
+    @RequestParam(required = true) Boolean updateAcademicTitleHistory) throws Exception {
     
     MemberDto memberToUpdate = memberService.findById(memberId);
+       if (memberDto.getAcademicTitleHistories()!=null && validateAth(memberDto.getAcademicTitleHistories())){
+        for (AcademicTitleHistory academicTitleHistory : memberDto.getAcademicTitleHistories()) {
+            memberToUpdate.getAcademicTitleHistories().add(academicTitleHistory);
+        }
+    }
+            //ovde osim upisanih dodajemo i staru koja usled promene treba da se doda
+            for (AcademicTitleHistory academicTitleHistory : memberToUpdate.getAcademicTitleHistories()) {
+            if (academicTitleHistory.getEndDate()==null){
+                if (Boolean.TRUE.equals(updateAcademicTitleHistory)&& validation(memberToUpdate, memberDto))
+                academicTitleHistory.setEndDate( LocalDate.now());
+            }
+          //  LocalDate startDateOfTitle = last.getEndDate();
+            //AcademicTitleHistory ath = new AcademicTitleHistory(memberConverter.toEntity(memberToUpdate), startDateOfTitle, LocalDate.now(), memberToUpdate.getAcademic_title(), memberToUpdate.getScientific_field());
+            //memberToUpdate.getAcademicTitleHistories().add(ath);
+            
+    }
     
     if (memberDto.getFirstname()!=null && !memberDto.getFirstname().equals("string")){
         memberToUpdate.setFirstname(memberDto.getFirstname());
@@ -134,6 +157,8 @@ public ResponseEntity<MemberDto> updateMember(
    
      if (memberDto.getAcademic_title().getId()!=null && memberDto.getAcademic_title().getId()!=0){
         memberToUpdate.setAcademic_title(memberDto.getAcademic_title());
+        AcademicTitleHistory newath = new AcademicTitleHistory(memberConverter.toEntity(memberToUpdate), LocalDate.now(), null, memberToUpdate.getAcademic_title(), memberToUpdate.getScientific_field());  
+        memberToUpdate.getAcademicTitleHistories().add(newath);
     }
 
  
@@ -149,17 +174,31 @@ public ResponseEntity<MemberDto> updateMember(
     if (memberDto.getDepartmentId()!=null && memberDto.getDepartmentId()!=0){
        memberToUpdate.setDepartmentId(memberDto.getDepartmentId()); 
     }
-      memberToUpdate.setAcademicTitleHistories(memberDto.getAcademicTitleHistories());
-   
-        if (Boolean.TRUE.equals(updateAcademicTitleHistory)) {
-            // Logic to update the academic title history
-            // ...
-       // }
-    }
-
-    MemberDto updatedMember = memberService.save(memberToUpdate);
+    
+    MemberDto updatedMember = memberService.update(memberToUpdate);
     return new ResponseEntity<>(updatedMember, HttpStatus.OK);
 }
+
+    private boolean validation(MemberDto memberToUpdate, MemberDto memberDto) throws Exception {
+        if (memberDto.getAcademic_title().getId()==0){
+            throw new Exception ("Choose not to update ath (choose false) or enter the new title.");
+        }
+       if (memberToUpdate.getAcademic_title().equals(memberDto.getAcademic_title())){
+           throw new Exception ("Member already has that academic title.");
+       }
+       if (memberDto.getAcademic_title()==null  ){
+           throw new Exception("If you want to update academic title history, you have to type new academic title. It can't stay null.");
+       }
+
+       else return true;
+    }
+
+    private boolean validateAth(List<AcademicTitleHistory> academicTitleHistories) {
+        for (AcademicTitleHistory academicTitleHistory : academicTitleHistories) {
+            if (academicTitleHistory.getAcademicTitle().getId()==0 || academicTitleHistory.getAcademicTitle()==null) return false;
+            if (academicTitleHistory.getScientificField().getId()==0 || academicTitleHistory.getScientificField()==null) return false;
+        } return true;
+    }
    
   
 }

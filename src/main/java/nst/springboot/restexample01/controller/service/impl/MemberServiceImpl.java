@@ -4,6 +4,7 @@
  */
 package nst.springboot.restexample01.controller.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,15 +45,30 @@ public class MemberServiceImpl implements MemberService {
         this.departmentRepository = departmentRepository;
     }
     @Override
-    @Transactional
-    public MemberDto save(MemberDto memberDto) throws Exception {
-         if (memberDto.getDepartmentId()==null){
-             throw new Exception("You can not save a member without an existing department!");
-         }
-         Member member = memberConverter.toEntity(memberDto);
-            member = memberRepository.save(member);
-            return memberConverter.toDto(member);
+@Transactional
+public MemberDto save(MemberDto memberDto) throws Exception {
+    if (memberDto.getDepartmentId() == null) {
+        throw new Exception("You cannot save a member without an existing department!");
+    }
+    Member member = memberConverter.toEntity(memberDto);
+    
+    if (member.getAcademicTitleHistories() != null) {
+        for (AcademicTitleHistory history : member.getAcademicTitleHistories()) {
+            history.setMember(member);
+            if (history.getEndDate()==null || history.getStartDate()==null){
+                throw new Exception ("If endDate is null it means that's a current title so you can't store it this way.");
+            }
+            if (history.getAcademicTitle()==null || history.getScientificField()==null){
+                throw new Exception ("Academic Title and Scientific Field in AcademicTitleHistory are required");
+            }
         }
+    }
+    AcademicTitleHistory ath = new AcademicTitleHistory(member, LocalDate.now(), null, member.getAcademic_title(), member.getScientific_field());
+    member.getAcademicTitleHistories().add(ath);
+  
+    member = memberRepository.save(member);
+    return memberConverter.toDto(member);
+}
     
 
     @Override
@@ -84,8 +100,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void update(MemberDto memberDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Transactional
+    public MemberDto update(MemberDto memberDto) throws Exception {
+        
+    Member member = memberConverter.toEntity(memberDto);
+    if (member.getAcademicTitleHistories() != null) {
+        for (AcademicTitleHistory history : member.getAcademicTitleHistories()) {
+            history.setMember(member);
+        }
+    }
+    member = memberRepository.save(member);
+    return memberConverter.toDto(member);
     }
 
     @Override

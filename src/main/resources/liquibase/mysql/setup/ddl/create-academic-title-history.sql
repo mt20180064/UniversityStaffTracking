@@ -2,9 +2,9 @@ create table tbl_academic_title_history(
 	id bigint unsigned not null AUTO_INCREMENT,
 	start_date datetime not null,
         end_date datetime,
-        academic_title_id bigint unsigned,
-        scientific_field_id bigint unsigned,
-        member_id bigint unsigned,
+        academic_title_id bigint unsigned not null,
+        scientific_field_id bigint unsigned not null,
+        member_id bigint unsigned not null,
 	primary key (id),
         
         constraint academic_title_fk2 FOREIGN KEY (academic_title_id) REFERENCES tbl_academic_title(id),
